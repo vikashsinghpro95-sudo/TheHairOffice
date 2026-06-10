@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DB2RBCDPDE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-DB2RBCDPDE');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Hair Office | Medical Hair Practice</title>
@@ -13,7 +22,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FAFAF9; /* warm pastel stone */
+            background-color: #FAFAF9;
             color: #1C1917;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden; /* Prevent horizontal scroll when menu opens */
@@ -27,6 +36,60 @@
             animation: scroll 25s linear infinite;
         }
         @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Brand logo marquee for clinic accreditations */
+        .brand-marquee {
+            display: flex;
+            width: max-content;
+            animation: brand-scroll 35s linear infinite;
+        }
+        .brand-marquee .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            animation: none; /* override default marquee animation */
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.5rem;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .brand-logo img {
+            max-height: 56px;
+            width: auto;
+        }
+        .brand-logo:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        .brand-logo-text {
+            filter: none;
+        }
+        .brand-logo-text:hover {
+            filter: none;
+        }
+        .marquee-overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+        }
+        .left-overlay {
+            left: 0;
+            background: linear-gradient(to right, #FAFAF9 0%, rgba(250, 250, 249, 0) 100%);
+        }
+        .right-overlay {
+            right: 0;
+            background: linear-gradient(to left, #FAFAF9 0%, rgba(250, 250, 249, 0) 100%);
+        }
+        @keyframes brand-scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
@@ -53,6 +116,25 @@
             transform: translate(-50%, -50%);
             z-index: 20;
             pointer-events: none;
+        }
+
+        /* Hero Background Slider – B/W images, 1s fade */
+        .hero-bg-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-bg-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        .hero-bg-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: grayscale(100%);
         }
 
         /* Subtle Fade In Animation */
@@ -110,7 +192,78 @@
         body.menu-open {
             overflow: hidden;
         }
+
+        /* Review card truncation – first 5 lines */
+        .review-preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        /* Review slider */
+        .review-slider-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        .review-slider-wrapper {
+            overflow: hidden;
+        }
+        .review-slide {
+            flex: 0 0 100%;
+            min-width: 100%;
+        }
+        @media (min-width: 768px) {
+            .review-slide { flex: 0 0 50%; min-width: 50%; }
+        }
+        @media (min-width: 1024px) {
+            .review-slide { flex: 0 0 33.333%; min-width: 33.333%; }
+        }
+
+        /* Review modal overlay */
+        .review-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .review-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .review-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            max-width: 560px;
+            width: calc(100% - 2rem);
+            max-height: 85vh;
+            background: #FAFAF9;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .review-modal-overlay.active .review-modal {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .review-modal-content {
+            overflow-y: auto;
+            padding: 2rem;
+        }
     </style>
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
 </head>
 <body class="selection:bg-stone-200 selection:text-stone-900 relative">
 
@@ -131,217 +284,281 @@
                 </button>
             </div>
 
-            <!-- Menu Links -->
             <div class="space-y-8 mb-10">
                 <div>
                     <h3 class="text-xs font-medium text-stone-400 uppercase tracking-widest mb-4">Navigation</h3>
                     <ul class="space-y-4">
-                        <li><a href="#treatments" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:scissors-linear" width="20"></iconify-icon>
+                        <li><a href="https://magenta-elf-b895a8.netlify.app/" target="_blank" class="mobile-menu-link text-lg font-semibold text-stone-900 bg-[#E8C2B3] hover:bg-[#DFB5A5] p-3 rounded-xl transition-colors flex items-center gap-3 shadow-sm">
+                            <iconify-icon icon="solar:magic-stick-3-linear" class="text-stone-900" width="20"></iconify-icon>
+                            Free Hair Score
+                        </a></li>
+                        <li><a href="About Us.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="solar:users-group-two-rounded-linear" width="20"></iconify-icon>
+                            About us
+                        </a></li>
+                        <li><a href="treatments.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="ep:circle-plus-filled" width="20"></iconify-icon>
                             Treatments
                         </a></li>
-                        <li><a href="#team" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:users-group-two-rounded-linear" width="20"></iconify-icon>
-                            Specialists
-                        </a></li>
-                        <li><a href="#results" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                        <li><a href="press.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
                             <iconify-icon icon="solar:medal-ribbons-star-linear" width="20"></iconify-icon>
-                            Results
+                            In the press
                         </a></li>
-                        <li><a href="#reviews" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:star-linear" width="20"></iconify-icon>
-                            Reviews
+                        <li><a href="articles.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="simple-icons:microdotblog" width="20"></iconify-icon>
+                            Articles
                         </a></li>
-                        <li><a href="#faq" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:chat-square-question-linear" width="20"></iconify-icon>
-                            FAQ
-                        </a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-medium text-stone-400 uppercase tracking-widest mb-4">Contact</h3>
-                    <ul class="space-y-4">
-                        <li><a href="tel:+442012345678" class="text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:phone-linear" width="20"></iconify-icon>
-                            +44 7580 748097
-                        </a></li>
-                        <li><a href="mailto:hello@hairoffice.com" class="text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
-                            <iconify-icon icon="solar:letter-linear" width="20"></iconify-icon>
-                            Email Us
+                        
+                        <li><a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="solar:calendar-linear" width="20"></iconify-icon>
+                            Book a consultation
                         </a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-medium text-stone-400 uppercase tracking-widest mb-4">Clinic Hours</h3>
-                    <ul class="space-y-2">
-                        <li class="text-sm text-stone-600 flex justify-between">
-                            <span>Mon - Fri</span>
-                            <span class="font-medium">8:00 AM - 7:00 PM</span>
-                        </li>
-                        <li class="text-sm text-stone-600 flex justify-between">
-                            <span>Saturday</span>
-                            <span class="font-medium">9:00 AM - 5:00 PM</span>
-                        </li>
-                        <li class="text-sm text-stone-600 flex justify-between">
-                            <span>Sunday</span>
-                            <span class="font-medium">10:00 AM - 4:00 PM</span>
-                        </li>
-                    </ul>
+                    
                 </div>
+
+                
             </div>
 
             <!-- Mobile CTA Button -->
-            <a href="#" class="w-full bg-[#1C1917] text-white py-4 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-stone-800 transition-colors">
-                <iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>
-                Book Free Consultation
-            </a>
+            
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-40 border-b border-stone-200/60 bg-[#FAFAF9]/90 backdrop-blur-xl transition-all duration-300">
-        <div class="max-w-screen-2xl mx-auto px-6 h-20 flex items-center justify-between">
-            
-            <!-- Left Links (Desktop) -->
-            <div class="hidden md:flex items-center gap-8 w-1/3">
-                <a href="#treatments" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Treatments</a>
-                <a href="#team" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Specialists</a>
-                <a href="#results" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Results</a>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden w-1/3">
-                <button id="mobile-menu-button" class="p-2 -ml-2 text-stone-800 hover:text-stone-600">
-                    <iconify-icon icon="solar:hamburger-menu-linear" width="24" stroke-width="1.5"></iconify-icon>
-                </button>
-            </div>
-
-            <!-- Center Logo -->
-            <div class="w-1/3 flex justify-center text-center">
-                <a href="#" class="flex flex-col items-center group">
-                    <span class="text-lg md:text-xl font-semibold tracking-tighter text-stone-900 uppercase"><img src="/images/logo.png" alt="" style="width: 160px;"></span>
-                    <!-- <span class="text-[10px] text-stone-400 tracking-[0.2em] uppercase hidden md:block group-hover:text-stone-600 transition-colors">Medical Practice</span> -->
-                </a>
-            </div>
-
-            <!-- Right Links -->
-            <div class="flex items-center justify-end gap-6 w-1/3">
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#reviews" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Reviews</a>
-                    <a href="#faq" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">FAQ</a>
+    <nav class="fixed top-0 w-full z-40 border-b border-stone-200/60 bg-[#F4E2DD] transition-all duration-300">
+        <div class="max-w-screen-2xl mx-auto px-4">
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex flex-col items-center">
+                <!-- Top row: Logo + Mobile Controls -->
+                <div class="flex items-center justify-between w-full h-20">
+                    <!-- Left: Logo -->
+                    <div class="flex items-center">
+                        <a href="index.html" class="group">
+                            <img src="logo.jpeg" alt="The Hair Office" style="width: 140px;" onerror="this.style.display='none'; this.parentElement.innerHTML='The Hair Office';">
+                        </a>
+                    </div>
+                    
+                    <!-- Right: Mobile Controls -->
+                    <div class="flex items-center gap-3">
+                        <a href="index.html" class="p-2 text-stone-800 hover:text-stone-600" aria-label="Home">
+                            <iconify-icon icon="solar:home-2-linear" width="24" stroke-width="1.5"></iconify-icon>
+                        </a>
+                        <button id="mobile-menu-button" class="p-2 text-stone-800 hover:text-stone-600">
+                            <iconify-icon icon="solar:hamburger-menu-linear" width="24" stroke-width="1.5"></iconify-icon>
+                        </button>
+                    </div>
                 </div>
-                <a href="tel:+442012345678" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full border border-stone-200 bg-white hover:bg-stone-50 transition-colors">
-                    <iconify-icon icon="solar:phone-linear" width="14"></iconify-icon>
-                    <span class="text-xs font-medium">‪+44 7580 748097‬</span>
+                
+                <!-- Phone & Email (Mobile - centered below navbar) -->
+                <div class="w-full flex justify-center pb-3 -mt-1">
+                    <div class="inline-flex items-center bg-[#F0DCD4] px-4 py-1.5 rounded-full">
+                        <a href="mailto:info@thehairoffice.com" class="text-xs font-medium text-stone-600 hover:text-stone-900">info@thehairoffice.com</a>
+                        <span class="text-xs text-stone-400 mx-2">|</span>
+                        <a href="tel:02078469596" class="text-xs font-medium text-stone-600 hover:text-stone-900">020 7846 9596</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between h-20">
+                <!-- Left: Logo -->
+                <a href="index.html" class="group">
+                    <img src="logo.jpeg" alt="The Hair Office" style="width: 160px;" onerror="this.style.display='none'; this.parentElement.innerHTML='The Hair Office';">
                 </a>
-                <button class="md:hidden">
-                    <iconify-icon icon="solar:user-circle-linear" width="24" stroke-width="1.5"></iconify-icon>
-                </button>
+
+                <!-- Right: Nav links (desktop) + Mobile controls -->
+                <div class="flex items-center gap-6">
+                    <!-- Desktop Nav Links -->
+                    <div class="hidden md:flex items-center gap-8">
+                        <a href="About Us.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">About us</a>
+                        <a href="treatments.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Treatments</a>
+                        <a href="press.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">In the press</a>
+                        <a href="articles.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Article</a>
+                        <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Book a consultation</a>
+                        <a href="https://magenta-elf-b895a8.netlify.app/" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#E8C2B3] text-stone-900 text-xs font-semibold hover:bg-[#DFB5A5] transition-colors uppercase tracking-wide shadow-sm"><iconify-icon icon="solar:magic-stick-3-linear" width="14" class="text-stone-900"></iconify-icon><span>Free Hair Score</span></a>
+                    </div>
+
+                    <!-- Contact Card (Desktop - Right side) -->
+                    <div class="hidden md:flex flex-col items-end">
+                        <a href="mailto:info@thehairoffice.com" class="text-xs font-medium text-stone-600 hover:text-stone-900 transition-colors">info@thehairoffice.com</a>
+                        <a href="tel:02078469596" class="text-xs font-medium text-stone-900 hover:text-stone-700 transition-colors">020 7846 9596</a>
+                    </div>
+
+                    <!-- WhatsApp Button (Desktop) -->
+                    <a href="https://wa.me/447580748097" target="_blank" class="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#1C1917] text-white text-xs font-medium hover:bg-stone-800 transition-colors">
+                        <iconify-icon icon="logos:whatsapp-icon" width="14"></iconify-icon>
+                        <span>Connect On WhatsApp</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
     <main>
-        <!-- Hero Section -->
-        <section class="pt-32 pb-12 md:pt-40 md:pb-20 px-6 max-w-screen-xl mx-auto">
-            <div class="flex flex-col items-center justify-center text-center mb-16 reveal active">
-                <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-stone-100 border border-stone-200/60">
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <span class="text-[10px] md:text-xs font-medium text-stone-500 uppercase tracking-widest">Accepting New Patients</span>
+        <!-- Hero Section: B/W background slider + overlay content -->
+        <section id="about" class="relative min-h-[100vh] flex items-center overflow-hidden">
+            <!-- Background image slider (B/W, 1s fade) -->
+            <div class="absolute inset-0">
+                <div class="hero-bg-slide active" data-slide="0">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1738&auto=format&fit=crop" alt="">
                 </div>
-                
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-stone-900 mb-6 leading-[0.95] max-w-5xl mx-auto">
-                    Redefining <span class="text-stone-400 italic font-light">hair restoration</span> through medical precision.
-                </h1>
-                
-                <p class="text-stone-500 text-lg md:text-xl font-light max-w-2xl leading-relaxed mx-auto">
-                    London's premier clinic for FUE transplants and regenerative therapies. Natural density designed by world-class specialists.
-                </p>
-            </div>
-
-            <!-- Comparison Slider -->
-            <div class="relative w-full max-w-5xl mx-auto h-[450px] md:h-[650px] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-[2rem] bg-stone-200 reveal comparison-container cursor-ew-resize group" id="comparison-slider">
-                <!-- After Image (Base) -->
-                <img src="https://images.unsplash.com/photo-1618077360395-f3068be8e001?q=80&w=2080&auto=format&fit=crop" 
-                     class="absolute top-0 left-0 w-full h-full object-cover" 
-                     alt="After Result">
-                
-                <div class="absolute top-8 right-8 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full border border-white/20 z-10 shadow-sm">
-                    <span class="text-xs font-semibold tracking-wider text-stone-900">AFTER 12 MONTHS</span>
+                <div class="hero-bg-slide" data-slide="1">
+                    <img src="https://images.unsplash.com/flagged/photo-1580820258381-20c91a156841?q=80&w=1160&auto=format&fit=crop" alt="">
                 </div>
-
-                <!-- Before Image (Overlay) -->
-                <div class="img-comp-overlay" id="overlay-img">
-                    <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?q=80&w=2080&auto=format&fit=crop" 
-                         class="absolute top-0 left-0 w-full h-full object-cover max-w-none grayscale-[30%]" 
-                         style="width: 100vw; max-width: 1024px;" 
-                         id="before-img-inner"
-                         alt="Before Procedure">
-                    
-                    <div class="absolute top-8 left-8 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full border border-white/20 z-30 shadow-sm">
-                        <span class="text-xs font-semibold tracking-wider text-stone-900">BEFORE</span>
-                    </div>
+               
+                <div class="hero-bg-slide" data-slide="4">
+                    <img src="https://www.southernliving.com/thmb/UIY4nrXB1FyGpSMX-VxmDVu1590=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/hair3-917037d392c84e7cac396971951cfd19.jpg" alt="">
                 </div>
-
-                <!-- Handle -->
-                <div class="slider-handle" id="slider-handle" style="left: 50%;">
-                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-stone-100">
-                        <iconify-icon icon="solar:arrows-left-right-linear" width="24" class="text-stone-900"></iconify-icon>
-                    </div>
+                <div class="hero-bg-slide" data-slide="4">
+                    <img src="https://images.unsplash.com/photo-1654539883428-89dc42832439?q=80&w=774&auto=format&fit=crop" alt="">
+                </div>
+                <div class="hero-bg-slide" data-slide="5">
+                    <img src="https://www.menshairstylesnow.com/wp-content/uploads/2020/12/Long-Curly-Hairstyles-For-Boys.jpg" alt="">
+                </div>
+                <div class="hero-bg-slide" data-slide="6">
+                    <img src="https://images.unsplash.com/photo-1758523668176-af3c969f665f?q=80&w=2064&auto=format&fit=crop" alt="">
+                </div>
+                <div class="hero-bg-slide" data-slide="7">
+                    <img src="https://images.unsplash.com/photo-1762344354898-d9033ca63f15?q=80&w=1740&auto=format&fit=crop" alt="">
+                </div>
+                <div class="hero-bg-slide" data-slide="8">
+                    <img src="https://plus.unsplash.com/premium_photo-1764591654549-752a99536026?q=80&w=870&auto=format&fit=crop" alt="">
+                </div>
+                <div class="hero-bg-slide" data-slide="9">
+                    <img src="https://www.menshairstylesnow.com/wp-content/uploads/2020/12/Long-Hair-Boys.jpg" alt="">
                 </div>
             </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mt-16 border-t border-stone-200 pt-8">
-                <div class="text-center">
-                    <div class="text-3xl font-medium tracking-tight text-stone-900">2.5k+</div>
-                    <div class="text-xs text-stone-500 uppercase tracking-wide mt-1">Surgeries</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-medium tracking-tight text-stone-900">99%</div>
-                    <div class="text-xs text-stone-500 uppercase tracking-wide mt-1">Success Rate</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-medium tracking-tight text-stone-900">15+</div>
-                    <div class="text-xs text-stone-500 uppercase tracking-wide mt-1">Years Exp.</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-medium tracking-tight text-stone-900">0%</div>
-                    <div class="text-xs text-stone-500 uppercase tracking-wide mt-1">Finance Avail.</div>
+            <!-- Gradient overlay for text readability -->
+            <div class="absolute inset-0 bg-gradient-to-r from-stone-900/85 via-stone-900/60 to-stone-900/30 z-[2]" aria-hidden="true"></div>
+            <!-- Content overlay -->
+            <div class="relative z-10 w-full px-6 pt-24 md:pt-32 pb-20 md:pb-24 flex items-center justify-center">
+                <div class="max-w-screen-xl mx-auto reveal active text-center">
+                    <h1 class="text-[56px] sm:text-[72px] md:text-[88px] lg:text-[110px] font-bold tracking-tight text-white uppercase leading-[0.95] mb-6 md:mb-8">
+                        Rooted in medicine
+                    </h1>
+                    <p class="text-xl md:text-2xl font-bold tracking-tight text-white mb-4 max-w-2xl mx-auto drop-shadow-lg">
+                        Redefining <span class="text-stone-200 italic font-semibold">hair restoration</span> through medical precision.
+                    </p>
+                    <p class="text-white text-base md:text-lg font-semibold max-w-2xl leading-relaxed mb-8 md:mb-10 mx-auto drop-shadow-md">
+                        The Hair Office is a medical hair restoration practice in London, specialising in advanced medical therapies and minimally invasive procedures for natural, long‑term results.
+                    </p>
+                    <a href="https://phorest.com/book/salons/thehairoffice" class="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-[#FAFAF9] text-stone-900 text-base font-semibold hover:bg-stone-100 transition-colors shadow-lg">
+                        Get in Touch
+                        <iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Marquee / Awards Section -->
-        <section class="py-12 border-y border-stone-200 bg-white overflow-hidden">
-            <div class="max-w-screen-xl mx-auto px-6 mb-6 text-center">
-                <span class="text-xs font-medium text-stone-400 uppercase tracking-widest">Accredited by & Featured in</span>
-            </div>
-            <div class="marquee-container w-full whitespace-nowrap flex overflow-hidden">
-                <div class="marquee-content flex items-center gap-16 md:gap-24 px-8 min-w-full">
-                    <!-- Logos (Text placeholders for style) -->
-                    <span class="text-2xl font-serif text-stone-300">VOGUE</span>
-                    <span class="text-2xl font-sans font-bold tracking-tighter text-stone-300">GQ</span>
-                    <span class="text-xl font-medium text-stone-300 flex items-center gap-2"><iconify-icon icon="solar:shield-check-bold"></iconify-icon> CQC Rated Good</span>
-                    <span class="text-2xl font-serif italic text-stone-300">Tatler</span>
-                    <span class="text-xl font-bold text-stone-300">ISHRS</span>
-                    <span class="text-2xl font-serif text-stone-300">Men's Health</span>
-                    <span class="text-xl font-bold text-stone-300 tracking-tight">BAHRS</span>
-                    <!-- Duplicate for loop -->
-                    <span class="text-2xl font-serif text-stone-300">VOGUE</span>
-                    <span class="text-2xl font-sans font-bold tracking-tighter text-stone-300">GQ</span>
-                    <span class="text-xl font-medium text-stone-300 flex items-center gap-2"><iconify-icon icon="solar:shield-check-bold"></iconify-icon> CQC Rated Good</span>
-                    <span class="text-2xl font-serif italic text-stone-300">Tatler</span>
-                    <span class="text-xl font-bold text-stone-300">ISHRS</span>
-                    <span class="text-2xl font-serif text-stone-300">Men's Health</span>
-                    <span class="text-xl font-bold text-stone-300 tracking-tight">BAHRS</span>
+        <!-- Marquee / Awards Section (Accreditations) -->
+        <section id="press" class="py-12 border-y border-stone-200 bg-[#FAFAF9]">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="mb-6 text-center">
+                    <span class="text-xs font-medium text-stone-400 uppercase tracking-widest">Practitioners seen in</span>
+                </div>
+                <div class="relative overflow-hidden">
+                    <div class="brand-marquee">
+                        <div class="marquee-content">
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/General_Medical_Council_logo.svg" alt="General Medical Council (GMC)">
+                                <span class="sr-only">GMC Registered</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://ukstudycentre.co.uk/wp-content/uploads/2018/03/Tatler_logo_text.png" alt="Featured in Tatler">
+                                <span class="sr-only">Featured in Tatler 2025</span>
+                            </div>
+                            
+                            <div class="brand-logo">
+                                <img src="https://d1ooscleda9ip9.cloudfront.net/Upload/635/Documents/2017%20News%20images/jccp-logo.png" alt="JCCP Approved">
+                                <span class="sr-only">JCCP Approved</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://uk.acegroup.online/wp-content/uploads/2025/10/ACE-Group-World-UK-Site-Logo.png" alt="ACE Group">
+                                <span class="sr-only">ACE Group</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://wowfacial.co.uk/wp-content/uploads/2023/08/The-Tweakments-Guide-Content-Coordinator2.jpg" alt="The Tweakments Guide">
+                                <span class="sr-only">The Tweakments Guide</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://www.newsworks.org.uk/wp-content/uploads/2021/06/The_Sunday_Times_logo_310.png" alt="The Sunday Times">
+                                <span class="sr-only">The Sunday Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://storage.googleapis.com/ft-commercial/images/FT_LANDSCAPE_RGB_AW.original.jpg" alt="Financial Times">
+                                <span class="sr-only">Financial Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRijPLcVpbm6tmBC7OUpD8OFNYDR_fmMFWnhw&s" alt="Men's Health">
+                                <span class="sr-only">Men's Health</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/GQ_Logo.svg" alt="GQ">
+                                <span class="sr-only">GQ</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://images.squarespace-cdn.com/content/v1/568abe4569492ea07bd8d391/1524586542319-38YXVJD1TOT1IFS7HLMF/press-logo-gloss+2.png" alt="Get The Gloss">
+                                <span class="sr-only">Get The Gloss</span>
+                            </div>
+                        </div>
+                        <div class="marquee-content">
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/General_Medical_Council_logo.svg" alt="General Medical Council (GMC)">
+                                <span class="sr-only">GMC Registered</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://ukstudycentre.co.uk/wp-content/uploads/2018/03/Tatler_logo_text.png" alt="Featured in Tatler">
+                                <span class="sr-only">Featured in Tatler 2025</span>
+                            </div>
+                            
+                            <div class="brand-logo">
+                                <img src="https://d1ooscleda9ip9.cloudfront.net/Upload/635/Documents/2017%20News%20images/jccp-logo.png" alt="JCCP Approved">
+                                <span class="sr-only">JCCP Approved</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://uk.acegroup.online/wp-content/uploads/2025/10/ACE-Group-World-UK-Site-Logo.png" alt="ACE Group">
+                                <span class="sr-only">ACE Group</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://wowfacial.co.uk/wp-content/uploads/2023/08/The-Tweakments-Guide-Content-Coordinator2.jpg" alt="The Tweakments Guide">
+                                <span class="sr-only">The Tweakments Guide</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://www.newsworks.org.uk/wp-content/uploads/2021/06/The_Sunday_Times_logo_310.png" alt="The Sunday Times">
+                                <span class="sr-only">The Sunday Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://storage.googleapis.com/ft-commercial/images/FT_LANDSCAPE_RGB_AW.original.jpg" alt="Financial Times">
+                                <span class="sr-only">Financial Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRijPLcVpbm6tmBC7OUpD8OFNYDR_fmMFWnhw&s" alt="Men's Health">
+                                <span class="sr-only">Men's Health</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/GQ_Logo.svg" alt="GQ">
+                                <span class="sr-only">GQ</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://images.squarespace-cdn.com/content/v1/568abe4569492ea07bd8d391/1524586542319-38YXVJD1TOT1IFS7HLMF/press-logo-gloss+2.png" alt="Get The Gloss">
+                                <span class="sr-only">Get The Gloss</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gradient overlays -->
+                    <div class="marquee-overlay left-overlay"></div>
+                    <div class="marquee-overlay right-overlay"></div>
                 </div>
             </div>
         </section>
 
-        <!-- The Specialists Section -->
+>
+
+        <!-- The Specialists Section (Lead Practitioners) -->
         <section id="team" class="py-24 px-6 max-w-screen-xl mx-auto">
             <div class="text-center mb-16 max-w-2xl mx-auto reveal">
                 <h2 class="text-3xl md:text-5xl font-medium tracking-tight text-stone-900 mb-4">Lead Practitioners</h2>
@@ -350,43 +567,15 @@
 
             <!-- 2 Column Layout for Doctors -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
-                <!-- Dr 1 -->
+                <!-- Dr 1 - Anju Mehta -->
                 <div class="group relative reveal">
                     <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-6 bg-stone-200">
-                        <img src="images/Kelly+Morrell,+Scalp+Confidential.webp" 
-                             alt="Dr. Kelly Morrel" 
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 saturate-0 group-hover:saturate-100">
-                        
-                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
-                             <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Scalp Confidential Founder</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between items-start">
-                            <h3 class="text-2xl font-medium text-stone-900">Dr. Kelly Morrel</h3>
-                            <iconify-icon icon="solar:verified-check-bold" class="text-stone-300" width="24"></iconify-icon>
-                        </div>
-                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">Scalp Confidential Founder, SMP Technician and Aesthetic practitioner</p>
-                        <p class="text-stone-600 font-light leading-relaxed mb-6">
-                            Kelly  set up Scalp Confidential in 2017 to help meet the demand of clients wanting non surgical hair loss treatments. Kelly treats a wide range of hair loss concerns herself, by providing in depth consultations, Scalp Micropigmentation, growth factor treatments with scalp microneedling and Trichotest genetic hair testing.
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">Hair Transplant Surgeon</span>
-                            <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">Aesthetic Medicine Awards for Hair Restoration Practitioner</span>
-                            <!-- <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">ISHRS Fellow</span> -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dr 2 -->
-                <div class="group relative reveal delay-100">
-                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-6 bg-stone-200">
                         <img src="images/Dr-Anju-Meta-CSC-610x690.png" 
-                             alt="Dr. Anju Mehta" 
+                             alt="Dr. Anju Mehta"   
                              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 saturate-0 group-hover:saturate-100">
                         
-                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
-                             <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Medical Aesthetic Doctor</p>
+<div class="absolute bottom-4 left-4 bg-[#FAFAF9]/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
+                              <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Aesthetics Doctor</p>
                         </div>
                     </div>
                     <div>
@@ -394,81 +583,291 @@
                             <h3 class="text-2xl font-medium text-stone-900">Dr. Anju Mehta</h3>
                             <iconify-icon icon="solar:verified-check-bold" class="text-stone-300" width="24"></iconify-icon>
                         </div>
-                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">MBBS, MD, Level 7 Diploma.</p>
+                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">MBBS, MD (Anaesthesia), JCCP Level 7</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">Dr Anju Mehta brings over two decades of clinical experience as an Anaesthetist, with a background spanning the NHS and international practice. She transitioned into aesthetic medicine following completion of the Ofqual-regulated, JCCP-approved Level 7 postgraduate diploma in injectables - the highest recognised standard of training in the UK.</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">She has since undertaken advanced training in regenerative aesthetics and medical hair restoration, including PRP, polynucleotides and evidence-led approaches, allowing her to take a more comprehensive, diagnosis-driven view of hair and scalp health.</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-6">At The Hair Office, her work is defined by clinical rigour, precision, and a deep understanding of the biological processes that underpin hair loss. Each treatment plan is highly personalised and ethically considered — with a focus on long-term improvement rather than short-term fixes. Known for her calm and meticulous approach, Dr Mehta builds enduring patient relationships, guiding each individual through a structured, carefully considered treatment journey.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">Aesthetics Doctor</span>
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">20+ Years of Medical Experience</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dr 2 - Kelly Morrell -->
+                <div class="group relative reveal delay-100">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-6 bg-stone-200">
+                        <img src="images/Kelly+Morrell,+Scalp+Confidential.webp" 
+                             alt="Kelly Morrell" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 saturate-0 group-hover:saturate-100">
+                        
+                        <div class="absolute bottom-4 left-4 bg-[#FAFAF9]/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
+                             <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Scalp Specialist</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-medium text-stone-900">Kelly Morrell</h3>
+                            <iconify-icon icon="solar:verified-check-bold" class="text-stone-300" width="24"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">Hair Restoration Specialist</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            Kelly Morrell brings over 13 years of experience as a specialist in hair restoration, with a focused expertise in advanced, non-surgical treatments for hair loss and scalp health.
+                        </p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            Her work is shaped by a detailed understanding of hair biology and regenerative processes, supported by extensive experience in treatments such as growth factor therapies, microneedling, and scalp micropigmentation. She has also incorporated advanced diagnostic approaches, including genetic testing and trichoscopy, to better understand the underlying drivers of hair loss.
+                        </p>
                         <p class="text-stone-600 font-light leading-relaxed mb-6">
-                            20 years of clinical experience as an Anaesthetist working in the NHS and internationally.
-                            She ventured into the field of Aesthetics after completing the Ofqual-regulated and JCCP-approved postgraduate Level 7 diploma in injectables from one of the leading providers and now works exclusively in the aesthetics sector.
+                            At The Hair Office, Kelly's approach is precise, methodical, and highly individualised - centred on identifying the underlying problem before selecting the treatment. Each plan is tailored with care, combining clinical insight with a strong aesthetic sensibility to achieve natural, long-term outcomes. Her work is guided by consistency, clarity, and a commitment to long-term hair health.
                         </p>
                         <div class="flex flex-wrap gap-2">
-                            <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">Aesthetics Doctor</span>
-                            <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">20+ Years of Experience</span>
-                            <span class="px-2 py-1 rounded border border-stone-200 bg-white text-[10px] uppercase tracking-wide text-stone-500">MBBS</span>
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">13 + Years of Hair Restoration Experience</span>
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">Hair Restoration Practitioner of the Year 2024 Finalist</span>
+                            <!-- <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">ISHRS Fellow</span> -->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Video Section -->
-        <section class="py-24 bg-stone-100 border-t border-stone-200">
+        <!-- How We Work Section -->
+        <section id="how-we-work" class="py-24 bg-[#FDFCF8] border-b border-stone-200">
+            <div class="max-w-screen-xl mx-auto px-6 grid grid-cols-1 md:grid-cols-[1.1fr] gap-12 items-start">
+                <div class="text-center">
+                    <p class="text-xs font-medium text-stone-400 uppercase tracking-[0.25em] mb-3">How we work</p>
+                    <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-4">
+                        Consultation first. No obligation. Clear planning.
+                    </h2>
+                    <p class="text-stone-600 text-sm md:text-base leading-relaxed mb-4">
+                        Every consultation begins with careful assessment and open discussion.
+                    </p>
+                    <p class="text-stone-600 text-sm md:text-base leading-relaxed mb-6">
+                        Recommendations are made thoughtfully, with attention to suitability, timing, and long-term hair health. Where appropriate, care is delivered within structured treatment plans designed to evolve over time.
+                    </p>
+                    <p class="text-stone-600 text-sm md:text-base leading-relaxed mb-6">
+                        There is no obligation to proceed beyond consultation.
+                    </p>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto text-sm text-stone-700">
+                        <li class="rounded-2xl border border-stone-200 bg-[#FAFAF9] p-6 text-left shadow-sm">
+                            <span class="h-6 w-6 rounded-full bg-stone-900 text-[11px] text-white flex items-center justify-center mb-4">1</span>
+                            <p class="font-medium text-stone-900 mb-2">Consultation‑first approach</p>
+                            <p class="text-stone-600 leading-relaxed">45 minute medical consultation with photography, scalp assessment and realistic goal‑setting.</p>
+                        </li>
+                        <li class="rounded-2xl border border-stone-200 bg-[#FAFAF9] p-6 text-left shadow-sm">
+                            <span class="h-6 w-6 rounded-full bg-stone-900 text-[11px] text-white flex items-center justify-center mb-4">2</span>
+                            <p class="font-medium text-stone-900 mb-2">Careful assessment</p>
+                            <p class="text-stone-600 leading-relaxed">Recommendations are made thoughtfully, with attention to suitability, timing, and long-term hair health. Where appropriate, care is delivered within structured treatment plans designed to evolve over time.</p>
+                        </li>
+                        <li class="rounded-2xl border border-stone-200 bg-[#FAFAF9] p-6 text-left shadow-sm">
+                            <span class="h-6 w-6 rounded-full bg-stone-900 text-[11px] text-white flex items-center justify-center mb-4">3</span>
+                            <p class="font-medium text-stone-900 mb-2">No obligation beyond consultation</p>
+                            <p class="text-stone-600 leading-relaxed">This is a paid consultation, structured to provide clarity and direction - with no expectation to proceed.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clinical Standards Section -->
+        <section id="clinical-standards" class="py-24 bg-[#FAFAF9]">
             <div class="max-w-screen-xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                    <div>
-                        <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-2">Patient Stories</h2>
-                        <p class="text-stone-500">Watch the journey from consultation to final result.</p>
-                    </div>
-                    <a href="#" class="hidden md:flex items-center gap-2 text-sm font-medium text-stone-900 hover:opacity-70 mt-4 md:mt-0">
-                        View YouTube Channel <iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon>
-                    </a>
+                <div class="max-w-3xl mb-10 text-center mx-auto">
+                    <p class="text-xs font-medium text-stone-400 uppercase tracking-[0.25em] mb-3">Clinical standards</p>
+                    <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-4">
+                        Every decision has a reason.
+                    </h2>
+                
+                    <p class="text-sm md:text-base text-stone-600 leading-relaxed mt-4">
+                        Each consultation is structured to understand why hair loss is happening - before deciding what to do next.
+                    </p>
+                    <p class="text-sm md:text-base text-stone-600 leading-relaxed mt-4">
+                        The aim is to give you a clear understanding of your hair and your options - with no pressure to proceed.
+                    </p>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Video 1 -->
-                    <div class="group relative rounded-xl overflow-hidden aspect-video bg-stone-200 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1587778086307-f58c407817e8?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                                <iconify-icon icon="solar:play-bold" class="text-white" width="24"></iconify-icon>
+                <!-- SLIDER CONTENT - to be inserted -->
+                <div class="relative px-12 md:px-14">
+                    <button type="button" id="review-slider-prev" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10 w-10 h-10 rounded-full bg-[#FAFAF9] border border-stone-200 shadow-md flex items-center justify-center text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors" aria-label="Previous review">
+                        <iconify-icon icon="solar:arrow-left-linear" width="20"></iconify-icon>
+                    </button>
+                    <button type="button" id="review-slider-next" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-10 w-10 h-10 rounded-full bg-[#FAFAF9] border border-stone-200 shadow-md flex items-center justify-center text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors" aria-label="Next review">
+                        <iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon>
+                    </button>
+                    <div class="review-slider-wrapper">
+                        <div class="review-slider-track" id="review-slider-track">
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Highly Recommend! After suffering significant hair loss after a recent trauma, a family member suggested I contact Kelly Morrell at Scalp Confidential. I am so glad I did, from my very first consultation, Kelly made me feel at ease and explained all options that were specific to me, with expertise, honesty and empathy. I would highly recommend them without hesitation!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Highly Recommend! After suffering significant hair loss after a recent trauma, a family member suggested I contact Kelly Morrell at Scalp Confidential. I am so glad I did, from my very first consultation, Kelly made me feel at ease and explained all options that were specific to me, with expertise, honesty and empathy. I would highly recommend them without hesitation!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Would highly recommend Kelly! Kelly is fantastic - incredibly knowledgeable, holistic and very warm and caring in delivering care in all things related to hair. I went to Kelly as I was experiencing multi-factoral hair shedding (Covid-related, surgery-related, stress, etc) and wanted to complete the Calecim course. Not only did she provide evidence of Calecim's success with other patients, but she also suggested other treatments (diet changes, gut biome improvement) that would help in treating the root causes for the shedding. Beyond that, she saw early signs of permanent hair loss and recommended I see a dermatologist to treat those issues as well. She cares about all her patients - and it's evident in her treatment. I can't recommend her enough to others!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Would highly recommend Kelly! Kelly is fantastic - incredibly knowledgeable, holistic and very warm and caring in delivering care in all things related to hair. I went to Kelly as I was experiencing multi-factoral hair shedding (Covid-related, surgery-related, stress, etc) and wanted to complete the Calecim course. Not only did she provide evidence of Calecim's success with other patients, but she also suggested other treatments (diet changes, gut biome improvement) that would help in treating the root causes for the shedding. Beyond that, she saw early signs of permanent hair loss and recommended I see a dermatologist to treat those issues as well. She cares about all her patients - and it's evident in her treatment. I can't recommend her enough to others!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Everything was great about my experience Kelly was very professional and did a great job, I was a bit unsure of the process at the beginning but Kelly answered all my questions and put my mind at ease, definitely going back!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Everything was great about my experience Kelly was very professional and did a great job, I was a bit unsure of the process at the beginning but Kelly answered all my questions and put my mind at ease, definitely going back!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I recently completed four sessions of Scalp Micropigmentation (SMP) with Kelly at Scalp Confidential, and I couldn't be happier with the results. Kelly's professionalism and expertise are truly outstanding. From the initial consultation to the final session, she made sure I was comfortable and well-informed about the process. The results are amazing, far exceeding my expectations. My hair looks incredibly natural and thick like it once was when I was younger, and I feel much more confident in myself. I highly recommend Kelly Morrell and Scalp Confidential to anyone considering SMP. The experience was fantastic, and the results speak for themselves.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I recently completed four sessions of Scalp Micropigmentation (SMP) with Kelly at Scalp Confidential, and I couldn't be happier with the results. Kelly's professionalism and expertise are truly outstanding. From the initial consultation to the final session, she made sure I was comfortable and well-informed about the process. The results are amazing, far exceeding my expectations. My hair looks incredibly natural and thick like it once was when I was younger, and I feel much more confident in myself. I highly recommend Kelly Morrell and Scalp Confidential to anyone considering SMP. The experience was fantastic, and the results speak for themselves.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I'm very happy with Kelly's outstanding treatment and care when I have had my SMP treatment at the Private Clinic in Harley Street in London. The staff at the clinic were very good too. I found Kelly very professional, diligent and exceptional in the treatment she had provided. She was very thorough in her explanations of the procedure which helped me a lot. She was always happy to help whenever needed. I would definitely give Kelly a 5/5 rating for her care and treatment. Thank you">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I'm very happy with Kelly's outstanding treatment and care when I have had my SMP treatment at the Private Clinic in Harley Street in London. The staff at the clinic were very good too. I found Kelly very professional, diligent and exceptional in the treatment she had provided. She was very thorough in her explanations of the procedure which helped me a lot. She was always happy to help whenever needed. I would definitely give Kelly a 5/5 rating for her care and treatment. Thank you</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Very informative and helpful, Kelly is fantastic can't credit her enough, the difference it has made made me feel like a brand new person xx">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Very informative and helpful, Kelly is fantastic can't credit her enough, the difference it has made made me feel like a brand new person xx</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Kelly helped me with my dramatically thinning hair to return my self-confidence and overcome my inhibitions about my appearance. Luscious hair is so important for women (& probably men too) and over the years, due to childbirth and anxiety, my hair had thinned an inordinate amount and it made me very unhappy. Kelly has done the most amazing job in recreating a fuller head of hair with scalp micropigmentation, some medication and incredible care and attention. More than anything, she reassured me along the way, didn't push for transplants (which I couldn't afford) and her expertise and determination to make a difference is rarely seen. A true dedicated professional who delivers results. Cannot recommend highly enough. If you're hesitating about moving forward with treatment, don't - it's totally worth it!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Kelly helped me with my dramatically thinning hair to return my self-confidence and overcome my inhibitions about my appearance. Luscious hair is so important for women (& probably men too) and over the years, due to childbirth and anxiety, my hair had thinned an inordinate amount and it made me very unhappy. Kelly has done the most amazing job in recreating a fuller head of hair with scalp micropigmentation, some medication and incredible care and attention. More than anything, she reassured me along the way, didn't push for transplants (which I couldn't afford) and her expertise and determination to make a difference is rarely seen. A true dedicated professional who delivers results. Cannot recommend highly enough. If you're hesitating about moving forward with treatment, don't - it's totally worth it!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Finished my treatments last week, can already see a great difference. I would like to thank Kelly here for such a wonderful job. She has been very helpful throughout the procedure and after care service was excellent. Whole team at The Private Clinic of Harley Street was excellent, you feel welcomed the moment you walk in. I will definitely recommend them.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Finished my treatments last week, can already see a great difference. I would like to thank Kelly here for such a wonderful job. She has been very helpful throughout the procedure and after care service was excellent. Whole team at The Private Clinic of Harley Street was excellent, you feel welcomed the moment you walk in. I will definitely recommend them.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Having been tentative about getting treatment, the initial consultation was all I needed to convince me I'd made the right decision. I was in great hands with people who knew what they were doing and worked with me to assess all my options and which ones would work best for me. Having decided on my treatment, I have no regrets. It's a great service and your comfort and experience during the sessions is clearly very important to them - couldn't have asked for better">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Having been tentative about getting treatment, the initial consultation was all I needed to convince me I'd made the right decision. I was in great hands with people who knew what they were doing and worked with me to assess all my options and which ones would work best for me. Having decided on my treatment, I have no regrets. It's a great service and your comfort and experience during the sessions is clearly very important to them - couldn't have asked for better</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="After a really thorough consultation I opted for a combined treatment. It's the first time I felt really listened to and the first time I felt there were real options for me. I had a treatment to strengthen my hair and then micro tattooing. I can honestly say I couldn't be happier and would definitely recommend them to anyone considering treatment.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">After a really thorough consultation I opted for a combined treatment. It's the first time I felt really listened to and the first time I felt there were real options for me. I had a treatment to strengthen my hair and then micro tattooing. I can honestly say I couldn't be happier and would definitely recommend them to anyone considering treatment.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Exceptional SMP service, 100% recommend, certainly the best decision I've made yet. Kelly is at the height of professionalism; friendly, caring and patient. Following the treatment I felt highly confident about myself, no more obsessing over hair loss, what a relief! After suffering severe hair loss for years, I decided to go for an SMP solution. Following a thorough consultation, and 4 sessions over a couple of months, I was ecstatic to see my new look. The treatment itself was at worst slightly uncomfortable at times, and for the best part just like a minor itch. Kelly takes considerable care to ensure you are always okay and time passes surprisingly quickly. The results are amazing - I genuinely believe I look younger, more confident. If you're unsure about SMP, at least go in for a consultation, I can assure you Kelly is the best out there! I have zero regrets and will definitely be going back for a top up. Thank you Kelly for a 5* service!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Exceptional SMP service, 100% recommend, certainly the best decision I've made yet. Kelly is at the height of professionalism; friendly, caring and patient. Following the treatment I felt highly confident about myself, no more obsessing over hair loss, what a relief! After suffering severe hair loss for years, I decided to go for an SMP solution. Following a thorough consultation, and 4 sessions over a couple of months, I was ecstatic to see my new look. The treatment itself was at worst slightly uncomfortable at times, and for the best part just like a minor itch. Kelly takes considerable care to ensure you are always okay and time passes surprisingly quickly. The results are amazing - I genuinely believe I look younger, more confident. If you're unsure about SMP, at least go in for a consultation, I can assure you Kelly is the best out there! I have zero regrets and will definitely be going back for a top up. Thank you Kelly for a 5* service!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Highly recommended. After suffering from thin hair and found it getting worse for last few years and trying various products (that didn't work) my hairdresser recommended Scalp Confidential. I had a really thorough consultation with Kelly and she put me at ease immediately so I decided to go ahead. Covid interrupted my last treatment session a little but results are so amazing and I am no longer worrying about how bare my scalp looks and feel much more confident.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Highly recommended. After suffering from thin hair and found it getting worse for last few years and trying various products (that didn't work) my hairdresser recommended Scalp Confidential. I had a really thorough consultation with Kelly and she put me at ease immediately so I decided to go ahead. Covid interrupted my last treatment session a little but results are so amazing and I am no longer worrying about how bare my scalp looks and feel much more confident.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I wanted to say a huge thank you! After wasting a fair bit of money with another clinic and getting nowhere I wasn't sure where to turn. Then I was recommended Kelly at Scalp Confidential. I wish I'd have known about you sooner! I was hesitant at first, as I'd spent a few thousand pounds over the last two years and got nowhere, still had the same hair loss issues. After a thorough consultation and some time spent really listening to my concerns, some tests, I was given a treatment plan. It's been a few months now and I can say 100% without hesitation I am so happy I found you! My hair definitely looks healthier, shiny and finally thicker and scalp is less noticeable. Thank you!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I wanted to say a huge thank you! After wasting a fair bit of money with another clinic and getting nowhere I wasn't sure where to turn. Then I was recommended Kelly at Scalp Confidential. I wish I'd have known about you sooner! I was hesitant at first, as I'd spent a few thousand pounds over the last two years and got nowhere, still had the same hair loss issues. After a thorough consultation and some time spent really listening to my concerns, some tests, I was given a treatment plan. It's been a few months now and I can say 100% without hesitation I am so happy I found you! My hair definitely looks healthier, shiny and finally thicker and scalp is less noticeable. Thank you!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="No one knows more about hair loss and appropriate treatment options than Kelly. I recommend her highly for honest and impartial advice.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">No one knows more about hair loss and appropriate treatment options than Kelly. I recommend her highly for honest and impartial advice.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Kelly is extraordinary, book her ASAP! I suffer from severe hair loss and Kelly was referred to me by my medical specialist and I'm so glad I went. After a course of scalp micropigmentation with Kelly I can honestly say that I feel and look great! As a Black woman I didn't think anything could be done, but Kelly put my mind at ease and together we worked on making sure it looked as natural as possible. The amount of compliments I have received is wonderful as my scalp looks like its been freshly shaved. Honestly, just book in for a consultation, you won't regret it. Thank you again Kelly for giving me back my confidence!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Kelly is extraordinary, book her ASAP! I suffer from severe hair loss and Kelly was referred to me by my medical specialist and I'm so glad I went. After a course of scalp micropigmentation with Kelly I can honestly say that I feel and look great! As a Black woman I didn't think anything could be done, but Kelly put my mind at ease and together we worked on making sure it looked as natural as possible. The amount of compliments I have received is wonderful as my scalp looks like its been freshly shaved. Honestly, just book in for a consultation, you won't regret it. Thank you again Kelly for giving me back my confidence!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+<div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I was sceptic at first, but after I did my research I decided to give it a go and haven't looked back. My results were amazing and I was really happy. I'd happily recommend it to anyone.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I was sceptic at first, but after I did my research I decided to give it a go and haven't looked back. My results were amazing and I was really happy. I'd happily recommend it to anyone.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <!-- New Testimonial 1 -->
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I would leave 10 stars for Dr Mehta if I could. Professional and super knowledgeable she has transformed the way that I look after my ageing skin. Dr Mehta has a kind, gentle and precise way, which makes me feel totally confident in her practice. Honesty in aesthetics is so important and I feel that the clinic and Dr Mehta in particular deliver that. I have been a client at Stoke Poges for over ten years and hope to visit for 10 more!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I would leave 10 stars for Dr Mehta if I could. Professional and super knowledgeable she has transformed the way that I look after my ageing skin. Dr Mehta has a kind, gentle and precise way, which makes me feel totally confident in her practice. Honesty in aesthetics is so important and I feel that the clinic and Dr Mehta in particular deliver that. I have been a client at Stoke Poges for over ten years and hope to visit for 10 more!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <!-- New Testimonial 2 -->
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I've had the pleasure of being treated by Dr Anju Mehta, and I can confidently say she's a game-changer in aesthetic medicine. Her calm, composed demeanour and honesty instantly puts one at ease. Dr Mehta took the time to understand my goals and tailored the treatment plan with meticulous attention to detail. I wouldn't be wrong in saying 'Dr Mehta doesn't just treat faces, she enhances confidence.' Her ethical approach and commitment to natural results make her a standout in the field. I wholeheartedly recommend Dr Anju Mehta.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I've had the pleasure of being treated by Dr Anju Mehta, and I can confidently say she's a game-changer in aesthetic medicine. Her calm, composed demeanour and honesty instantly puts one at ease. Dr Mehta took the time to understand my goals and tailored the treatment plan with meticulous attention to detail. I wouldn't be wrong in saying 'Dr Mehta doesn't just treat faces, she enhances confidence.' Her ethical approach and commitment to natural results make her a standout in the field. I wholeheartedly recommend Dr Anju Mehta.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <!-- New Testimonial 3 -->
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="Fantastic advice and clear results from Anju. Excellent service 10/10">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">Fantastic advice and clear results from Anju. Excellent service 10/10</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I had Scalp micro tattooing on my fringe areas to help cover my thin hair line. Was very happy with the treatment and services. I am allergic to fish so couldn't take supplements but very happy with tattoo. The clinic and staff makes you feel very comfortable and relaxed.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I had Scalp micro tattooing on my fringe areas to help cover my thin hair line. Was very happy with the treatment and services. I am allergic to fish so couldn't take supplements but very happy with tattoo. The clinic and staff makes you feel very comfortable and relaxed.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I started my treatment with Kelly from scalp confidential approx 3 months ago now. All I can say is that Kelly is super professional, caring and goes above and beyond. And finally she doesn't believe in making money just for the sake of making money. I wanted to try other less invasive treatments before looking at having a hair transplant, if these didn't work then okay I will look into hair transplant.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I started my treatment with Kelly from scalp confidential approx 3 months ago now. All I can say is that Kelly is super professional, caring and goes above and beyond. And finally she doesn't believe in making money just for the sake of making money. I wanted to try other less invasive treatments before looking at having a hair transplant, if these didn't work then okay I will look into hair transplant.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I would thoroughly recommend Scalp Confidential to provide hair loss treatment. Kelly really cares about getting results for you, not just after the money. She will only offer you treatments that are likely to show results. I had 2 courses of AQ solutions with Dermastamp - 1 treatment per week for 6 weeks and then a repeat. For the first 4 months I saw no improvement, until at the hairdressers (who didn't know about my treatment) told me I had new baby hairs growing all over my scalp! Since this, my hair has slowly but surely continued to thicken. My scalp is no longer the first thing I notice when looking in the mirror. Kelly has many years of experience and will only offer you treatments that are likely to work. Thank you Kelly!!">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I would thoroughly recommend Scalp Confidential to provide hair loss treatment. Kelly really cares about getting results for you, not just after the money. She will only offer you treatments that are likely to show results. I had 2 courses of AQ solutions with Dermastamp - 1 treatment per week for 6 weeks and then a repeat. For the first 4 months I saw no improvement, until at the hairdressers (who didn't know about my treatment) told me I had new baby hairs growing all over my scalp! Since this, my hair has slowly but surely continued to thicken. My scalp is no longer the first thing I notice when looking in the mirror. Kelly has many years of experience and will only offer you treatments that are likely to work. Thank you Kelly!!</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
+                            </div>
+                            <div class="review-slide px-2">
+                                <article class="review-card p-8 bg-[#FAFAF9] rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all cursor-pointer group h-full" data-review="I went for scalp micropigmentation, AQ Growth Factor serum and Viviscal Professional tablets and the results have been amazing. I had post-natal hair loss and also suffer with an underactive thyroid which made the hair loss worse, but now my hair looks and feels much thicker. Takes a while to grow out but I'm already at the root lift stage, and the micropigmentation has made my parting look much more normal. Kelly Morrell really knew her stuff, and the customer service was really impressive.">
+                                    <div class="flex text-yellow-400 text-xs mb-4"><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon><iconify-icon icon="solar:star-bold"></iconify-icon></div>
+                                    <p class="review-preview text-stone-700 text-sm leading-relaxed mb-4">I went for scalp micropigmentation, AQ Growth Factor serum and Viviscal Professional tablets and the results have been amazing. I had post-natal hair loss and also suffer with an underactive thyroid which made the hair loss worse, but now my hair looks and feels much thicker. Takes a while to grow out but I'm already at the root lift stage, and the micropigmentation has made my parting look much more normal. Kelly Morrell really knew her stuff, and the customer service was really impressive.</p>
+                                    <p class="text-xs font-medium text-stone-500 group-hover:text-stone-700 transition-colors">Open →</p>
+                                </article>
                             </div>
                         </div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <p class="text-sm font-medium">Michael's 2000 Graft FUE</p>
-                        </div>
                     </div>
-                    <!-- Video 2 -->
-                    <div class="group relative rounded-xl overflow-hidden aspect-video bg-stone-200 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1590086782792-42dd2350140d?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                                <iconify-icon icon="solar:play-bold" class="text-white" width="24"></iconify-icon>
-                            </div>
-                        </div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <p class="text-sm font-medium">The Consultation Process</p>
-                        </div>
-                    </div>
-                    <!-- Video 3 -->
-                    <div class="group relative rounded-xl overflow-hidden aspect-video bg-stone-200 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                            <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                                <iconify-icon icon="solar:play-bold" class="text-white" width="24"></iconify-icon>
-                            </div>
-                        </div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <p class="text-sm font-medium">PRP Therapy Explained</p>
-                        </div>
-                    </div>
-                </div>
+                </div></div>
             </div>
         </section>
 
-        <!-- Google Reviews Section -->
-        <section id="reviews" class="py-24 px-6 max-w-screen-xl mx-auto">
-             <div class="flex items-center gap-2 mb-10">
-                <iconify-icon icon="logos:google-icon" width="24"></iconify-icon>
-                <div class="flex items-center gap-1">
-                    <span class="text-lg font-bold text-stone-900">4.9</span>
+        <!-- Review Modal Popup -->
+        <div class="review-modal-overlay" id="review-modal-overlay">
+            <div class="review-modal" id="review-modal">
+                <div class="flex justify-between items-center p-6 pb-0">
                     <div class="flex text-yellow-400 text-sm">
                         <iconify-icon icon="solar:star-bold"></iconify-icon>
                         <iconify-icon icon="solar:star-bold"></iconify-icon>
@@ -476,169 +875,258 @@
                         <iconify-icon icon="solar:star-bold"></iconify-icon>
                         <iconify-icon icon="solar:star-bold"></iconify-icon>
                     </div>
-                    <span class="text-sm text-stone-500 ml-1">(480+ Reviews)</span>
+                    <button type="button" id="review-modal-close" class="p-2 text-stone-500 hover:text-stone-900 rounded-full hover:bg-stone-200 transition-colors" aria-label="Close">
+                        <iconify-icon icon="solar:close-circle-bold" width="24"></iconify-icon>
+                    </button>
+                </div>
+                <div class="review-modal-content flex-1">
+                    <p id="review-modal-text" class="text-stone-700 text-base leading-relaxed"></p>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Review 1 -->
-                <div class="p-8 bg-white rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex text-yellow-400 text-xs mb-4">
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
+                <!-- Article Section -->
+        <section id="Article" class="py-24 bg-[#FAFAF9] border-t border-stone-200">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mb-2">Clinic insights & advice</h2>
+                        <p class="text-stone-500 text-sm md:text-base max-w-xl">Short, evidence-based articles written by our medical team to help you understand causes of hair loss and the options available.</p>
                     </div>
-                    <p class="text-stone-700 text-sm leading-relaxed mb-6">
-                        "The level of professionalism at The Hair Office is unmatched. Dr. Sterling was honest about what I could achieve, and the results have exceeded my expectations. The aftercare team was brilliant."
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">DT</div>
-                        <div>
-                            <p class="text-sm font-medium text-stone-900">David Thompson</p>
-                            <p class="text-xs text-stone-400">2 months ago</p>
-                        </div>
-                    </div>
+                    <a href="articles.html" class="text-sm font-medium text-stone-900 hover:opacity-70">View all articles</a>
                 </div>
-                <!-- Review 2 -->
-                <div class="p-8 bg-white rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex text-yellow-400 text-xs mb-4">
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                    </div>
-                    <p class="text-stone-700 text-sm leading-relaxed mb-6">
-                        "I was nervous about the procedure, but Dr. Chen made me feel completely at ease. It was virtually painless. Best decision I've made for my confidence."
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">SK</div>
-                        <div>
-                            <p class="text-sm font-medium text-stone-900">Simon King</p>
-                            <p class="text-xs text-stone-400">1 month ago</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Post 1 -->
+                    <article class="group reveal flex flex-col">
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-stone-200 mb-5">
+                            <img src="article1.jpeg" alt="Why Does Hair Loss Happen" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1974&auto=format&fit=crop'">
+                            <div class="absolute inset-x-0 bottom-0 h-20 featured-gradient"></div>
+                            <div class="absolute bottom-3 left-3 flex gap-2">
+                                <span class="bg-[#FAFAF9]/90 backdrop-blur text-stone-800 text-[10px] font-semibold px-2 py-1 rounded-full">Medical Insights</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                 <!-- Review 3 -->
-                <div class="p-8 bg-white rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex text-yellow-400 text-xs mb-4">
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                        <iconify-icon icon="solar:star-bold"></iconify-icon>
-                    </div>
-                    <p class="text-stone-700 text-sm leading-relaxed mb-6">
-                        "The clinic is spotless and feels more like a luxury hotel than a medical office. The hairline design is incredibly natural. Nobody can tell I've had work done."
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">JL</div>
-                        <div>
-                            <p class="text-sm font-medium text-stone-900">James Lewis</p>
-                            <p class="text-xs text-stone-400">3 weeks ago</p>
+                        <div class="flex items-center gap-2 text-xs text-stone-400 mb-2">
+                            <span>Dr. Anju Mehta</span> <span>•</span> <span>5 min read</span>
                         </div>
-                    </div>
+                        <h3 class="text-xl font-medium text-stone-900 mb-2 leading-tight">
+                            <a href="press-posts/why-does-hair-loss-happen.html" class="hover:underline decoration-stone-300 underline-offset-4">WHY DOES HAIR LOSS HAPPEN — AND WHEN SHOULD YOU SEEK HELP?</a>
+                        </h3>
+                        <p class="text-stone-500 text-sm font-light leading-relaxed mb-4">
+                            A practical overview of genetic, hormonal and lifestyle factors that can influence thinning hair in men and women.
+                        </p>
+                        <a href="press-posts/why-does-hair-loss-happen.html" class="inline-flex items-center gap-1 text-xs font-medium text-stone-800 mt-auto hover:gap-2 transition-all">
+                            Read article <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>
+                        </a>
+                    </article>
+
+                    <!-- Post 2 -->
+                    <article class="group reveal flex flex-col delay-100">
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-stone-200 mb-5">
+                            <img src="article2.jpeg" alt="The Shift in Hair Restoration" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?q=80&w=1974&auto=format&fit=crop'">
+                            <div class="absolute inset-x-0 bottom-0 h-20 featured-gradient"></div>
+                            <div class="absolute bottom-3 left-3 flex gap-2">
+                                <span class="bg-[#FAFAF9]/90 backdrop-blur text-stone-800 text-[10px] font-semibold px-2 py-1 rounded-full">Regenerative Medicine</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-stone-400 mb-2">
+                            <span>Kelly Morrell</span> <span>•</span> <span>4 min read</span>
+                        </div>
+                        <h3 class="text-xl font-medium text-stone-900 mb-2 leading-tight">
+                            <a href="press-posts/shift-in-hair-restoration.html" class="hover:underline decoration-stone-300 underline-offset-4">THE SHIFT IN HAIR RESTORATION: FROM QUICK FIXES TO LONG-TERM CARE</a>
+                        </h3>
+                        <p class="text-stone-500 text-sm font-light leading-relaxed mb-4">
+                            From face shape to age and future loss patterns, a look at the principles behind our treatment approach.
+                        </p>
+                        <a href="press-posts/shift-in-hair-restoration.html" class="inline-flex items-center gap-1 text-xs font-medium text-stone-800 mt-auto hover:gap-2 transition-all">
+                            Read article <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>
+                        </a>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Social Media Section -->
+        <!-- Consultation Section -->
+        <section id="book-consultation" class="py-24 bg-[#FAFAF9] text-stone-900 border-t border-stone-200">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.25em] text-stone-500 mb-4">Book a consultation</p>
+                        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-4">Start with a medical hair assessment</h2>
+                        <p class="text-sm md:text-base text-stone-600 mb-6">Your consultation includes scalp photography, a review of your medical history and a realistic discussion of what can be achieved.</p>
+                        <ul class="text-sm text-stone-600 space-y-2 mb-8">
+                            <li>• Available in‑clinic in London</li>
+                            <li>• Discreet, 1:1 appointment with a doctor and a Hair Specialist</li>
+                            <li>• Personalised treatment plan and pricing</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#1C1917] text-white text-sm font-medium hover:bg-stone-800 transition-colors">
+                                Book Consultation
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Info Section -->
+        <section id="contact" class="py-16 bg-[#FAFAF9] text-stone-700">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    <!-- Phone -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                            <iconify-icon icon="solar:phone-linear" width="20" class="text-stone-700"></iconify-icon>
+                        </div>
+                        <div>
+                            <h4 class="text-stone-900 text-sm font-semibold uppercase tracking-widest mb-2">Phone</h4>
+                            <a href="tel:02078469596" class="text-stone-600 hover:text-stone-900 transition-colors">020 7846 9596</a>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                            <iconify-icon icon="solar:map-point-linear" width="20" class="text-stone-700"></iconify-icon>
+                        </div>
+                        <div>
+                            <h4 class="text-stone-900 text-sm font-semibold uppercase tracking-widest mb-2">Address</h4>
+                            <p class="text-stone-600 leading-relaxed">Battersea Park Clinic<br>521 - 525 Battersea Park Road<br>London SW11 3BN</p>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                            <iconify-icon icon="solar:letter-linear" width="20" class="text-stone-700"></iconify-icon>
+                        </div>
+                        <div>
+                            <h4 class="text-stone-900 text-sm font-semibold uppercase tracking-widest mb-2">Email</h4>
+                            <a href="mailto:info@thehairoffice.com" class="text-stone-600 hover:text-stone-900 transition-colors">info@thehairoffice.com</a>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center flex-shrink-0">
+                            <iconify-icon icon="logos:whatsapp-icon" width="20" class="text-stone-700"></iconify-icon>
+                        </div>
+                        <div>
+                            <h4 class="text-stone-900 text-sm font-semibold uppercase tracking-widest mb-2">WhatsApp</h4>
+                            <a href="https://wa.me/447580748097" class="text-stone-600 hover:text-stone-900 transition-colors">+44 7580 748097</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section
+<!-- Social Media Section -->
         <section class="py-20 bg-[#FDFCF8] border-t border-stone-200">
             <div class="max-w-screen-xl mx-auto px-6 text-center">
                 <h2 class="text-3xl font-medium text-stone-900 mb-8">Follow Our Work</h2>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="#" class="flex items-center gap-3 px-8 py-4 bg-white border border-stone-200 rounded-xl hover:border-stone-400 transition-colors shadow-sm group">
-                        <iconify-icon icon="logos:instagram-icon" width="20" class="opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all"></iconify-icon>
+                    <a href="https://www.instagram.com/thehairofficeofficial?igsh=cXF1dmE4M2NtM3hi&utm_source=qr" class="flex items-center gap-3 px-8 py-4 bg-[#FAFAF9] border border-stone-200 rounded-xl hover:border-stone-400 transition-colors shadow-sm group">
+                        <iconify-icon icon="logos:instagram-icon" width="20" class="opacity-80 group-hover:opacity-100 transition-all"></iconify-icon>
                         <span class="text-sm font-medium text-stone-700">@TheHairOffice</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-8 py-4 bg-white border border-stone-200 rounded-xl hover:border-stone-400 transition-colors shadow-sm group">
-                        <iconify-icon icon="logos:tiktok-icon" width="20" class="opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all"></iconify-icon>
-                        <span class="text-sm font-medium text-stone-700">TheHairOffice_LDN</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-8 py-4 bg-white border border-stone-200 rounded-xl hover:border-stone-400 transition-colors shadow-sm group">
-                        <iconify-icon icon="logos:youtube-icon" width="20" class="opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all"></iconify-icon>
-                        <span class="text-sm font-medium text-stone-700">Expert Advice</span>
+                    <a href="https://www.linkedin.com/company/the-hair-office/" class="flex items-center gap-3 px-8 py-4 bg-[#FAFAF9] border border-stone-200 rounded-xl hover:border-stone-400 transition-colors shadow-sm group">
+                        <iconify-icon icon="logos:linkedin-icon" width="20" class="opacity-80 group-hover:opacity-100 transition-all"></iconify-icon>
+                        <span class="text-sm font-medium text-stone-700">LinkedIn</span>
                     </a>
                 </div>
             </div>
         </section>
+
+        >
     </main>
 
     <!-- Content Rich Footer -->
     <footer class="bg-[#1C1917] text-stone-400 pt-20 pb-10">
         <div class="max-w-screen-xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
                 <!-- Brand -->
                 <div class="space-y-6">
                     <h3 class="text-stone-100 text-lg font-semibold uppercase tracking-tight">The Hair Office</h3>
                     <p class="text-sm leading-relaxed max-w-xs">
-                        A CQC registered medical practice dedicated to the art and science of hair restoration. London, United Kingdom.
+                        A medical practice dedicated to the art and science of hair restoration. 
                     </p>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:instagram-linear" width="20"></iconify-icon></a>
-                        <a href="#" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:facebook-linear" width="20"></iconify-icon></a>
-                        <a href="#" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:twitter-linear" width="20"></iconify-icon></a>
+                    <p class="text-sm leading-relaxed max-w-xs mt-2">
+                        Battersea Park Clinic<br>
+                        521 - 525 Battersea Park Road<br>
+                        London SW11 3BN<br>
+                        <a href="tel:02078469596" class="hover:text-stone-200 transition-colors">020 7846 9596</a>
+                    </p>
+                    <div class="mt-4 rounded-xl overflow-hidden w-full max-w-xs">
+                        <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=300&amp;height=150&amp;hl=en&amp;q=Battersea Park Clinic 521 - 525 Battersea Park Road London SW11 3BN&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a href="https://embed-googlemap.com">embed google map</a></div><style>.mapouter{position:relative;text-align:right;width:300px;height:150px;}.gmap_canvas {overflow:hidden;background:none!important;width:300px;height:150px;}.gmap_iframe {width:300px!important;height:150px!important;}</style></div>
+                    </div>
+                    <div class="flex gap-4 mt-4">
+                        <a href="https://www.instagram.com/thehairofficeofficial?igsh=cXF1dmE4M2NtM3hi&utm_source=qr" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:instagram-linear" width="20"></iconify-icon></a>
+                        <a href="https://www.linkedin.com/company/the-hair-office/" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:linkedin-linear" width="20"></iconify-icon></a>
                     </div>
                 </div>
 
-                <!-- Treatments -->
+                <!-- Navigation -->
                 <div>
+                    <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Navigation</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="About Us.html" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="treatments.html" class="hover:text-white transition-colors">Treatments</a></li>
+                        <li><a href="articles.html" class="hover:text-white transition-colors">articles</a></li>
+                        <li><a href="press.html" class="hover:text-white transition-colors">Press</a></li>
+                        </ul>
+                </div>
+
+                <!-- Treatments (aligned right) -->
+                <div class="md:text-right">
                     <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Treatments</h4>
-                    <ul class="space-y-4 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">FUE Hair Transplant</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Direct Hair Implantation</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Beard Transplant</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Eyebrow Restoration</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">PRP Therapy</a></li>
+                    <ul class="space-y-4 text-sm md:text-right">
+                        <li><a href="treatments.html#prp-prf" class="hover:text-white transition-colors">PRP / PRF</a></li>
+                        <li><a href="treatments.html#polynucleotides" class="hover:text-white transition-colors">Polynucleotides</a></li>
+                        <li><a href="treatments.html#calecim" class="hover:text-white transition-colors">Calecim</a></li>
+                        <li><a href="treatments.html#smp" class="hover:text-white transition-colors">SMP</a></li>
+                        <li><a href="treatments.html#tricho-test" class="hover:text-white transition-colors">Tricho test</a></li>
+                        <li><a href="treatments.html#needle-free-test" class="hover:text-white transition-colors">Needle free instant Blood test</a></li>
+                        <li><a href="treatments.html#scalp-cleanse" class="hover:text-white transition-colors">Scalp cleanse</a></li>
+                        <li><a href="treatments.html#hair-cocktail" class="hover:text-white transition-colors">Hair cocktail</a></li>
+                        <li><a href="treatments.html#red-light" class="hover:text-white transition-colors">Red light</a></li>
                     </ul>
                 </div>
 
-                <!-- Clinic -->
-                <div>
-                    <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Patient Info</h4>
-                    <ul class="space-y-4 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Pricing Guide</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Finance Options</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Travel & Accommodation</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Aftercare Instructions</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <!-- Newsletter -->
-                <div>
+                <!-- Stay Updated (aligned right) -->
+                <div class="md:text-right">
                     <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Stay Updated</h4>
-                    <p class="text-xs mb-4">Latest medical news and clinic updates.</p>
-                    <form class="flex flex-col gap-3">
+                    <p class="text-xs mb-4 md:text-right">Latest medical news and clinic updates.</p>
+                    <form class="flex flex-col gap-3 md:ml-auto md:max-w-xs">
                         <input type="email" placeholder="Email address" class="bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-stone-500 transition-colors">
                         <button class="bg-stone-100 text-stone-900 px-4 py-3 rounded-lg text-sm font-medium hover:bg-stone-200 transition-colors">Subscribe</button>
                     </form>
                 </div>
             </div>
+                </div>
+
 
             <!-- Bottom Bar -->
             <div class="pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-                <div class="flex gap-6">
-                    <a href="#" class="hover:text-white">Privacy Policy</a>
-                    <a href="#" class="hover:text-white">Terms of Service</a>
-                    <a href="#" class="hover:text-white">Cookie Policy</a>
-                    <a href="#" class="hover:text-white">CQC Report</a>
+                <div class="flex flex-wrap gap-x-6 gap-y-2 font-normal">
+                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="terms-of-use.html" class="hover:text-white transition-colors">Terms of Use</a>
+                    <a href="medical-disclaimer.html" class="hover:text-white transition-colors">Medical Disclaimer</a>
+                    <a href="legal-notice.html" class="hover:text-white transition-colors">Legal Notice</a>
+                    <a href="cookie-policy.html" class="hover:text-white transition-colors">Cookie Policy</a>
                 </div>
-                <span>© 2024 The Hair Office Ltd. All rights reserved.</span>
+                <span>© 2026 The Hair Office Ltd. All rights reserved.</span>
             </div>
         </div>
     </footer>
 
     <!-- Floating CTA Button -->
     <div class="fixed bottom-8 right-6 z-50">
-        <a href="#" class="group flex items-center gap-3 bg-[#1C1917] hover:bg-stone-800 text-white pl-6 pr-5 py-4 rounded-full shadow-2xl hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 ring-1 ring-white/20">
+        <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="group flex items-center gap-3 bg-[#1C1917] hover:bg-stone-800 text-white pl-6 pr-5 py-4 rounded-full shadow-2xl hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 ring-1 ring-white/20">
             <div class="flex flex-col items-start">
-                <span class="text-sm font-semibold tracking-wide">Book Consultation</span>
-                <span class="text-[10px] text-stone-400 font-medium uppercase tracking-wider">Free Evaluation</span>
+                <span class="text-sm font-semibold tracking-wide">Book a consultation</span>
             </div>
-            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+            <div class="w-8 h-8 rounded-full bg-[#FAFAF9]/10 flex items-center justify-center group-hover:bg-[#FAFAF9]/20 transition-colors">
                 <iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>
             </div>
         </a>
@@ -740,6 +1228,84 @@
             }
             window.addEventListener('scroll', revealOnScroll);
             revealOnScroll(); // Trigger once on load
+
+            // Hero background slider (B/W images, 1s fade)
+            const heroBgSlides = document.querySelectorAll('.hero-bg-slide');
+            if (heroBgSlides.length > 1) {
+                let currentBgIndex = 0;
+                setInterval(() => {
+                    heroBgSlides[currentBgIndex].classList.remove('active');
+                    currentBgIndex = (currentBgIndex + 1) % heroBgSlides.length;
+                    heroBgSlides[currentBgIndex].classList.add('active');
+                }, 4500);
+            }
+
+            // Review slider – left/right navigation (slides by 3 on desktop, 2 on tablet, 1 on mobile)
+            const reviewSliderWrapper = document.querySelector('.review-slider-wrapper');
+            const reviewTrack = document.getElementById('review-slider-track');
+            const reviewPrev = document.getElementById('review-slider-prev');
+            const reviewNext = document.getElementById('review-slider-next');
+            if (reviewTrack && reviewPrev && reviewNext && reviewSliderWrapper) {
+                const slides = reviewTrack.querySelectorAll('.review-slide');
+                const totalSlides = slides.length;
+                let currentIndex = 0;
+                const getVisibleCount = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+                const maxIndex = () => Math.max(0, totalSlides - getVisibleCount());
+
+                function updateSlider() {
+                    const wrapperWidth = reviewSliderWrapper.offsetWidth;
+                    const visibleCount = getVisibleCount();
+                    const slideWidth = wrapperWidth / visibleCount;
+                    reviewTrack.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+                }
+
+                reviewPrev.addEventListener('click', () => {
+                    currentIndex = Math.max(0, currentIndex - getVisibleCount());
+                    updateSlider();
+                });
+                reviewNext.addEventListener('click', () => {
+                    currentIndex = Math.min(maxIndex(), currentIndex + getVisibleCount());
+                    updateSlider();
+                });
+                window.addEventListener('resize', () => {
+                    updateSlider();
+                    currentIndex = Math.min(currentIndex, maxIndex());
+                });
+                updateSlider(); // Initial position
+            }
+
+            // Review modal – open on card click (Open), close on overlay/button/Escape
+            const reviewCards = document.querySelectorAll('.review-card');
+            const reviewModalOverlay = document.getElementById('review-modal-overlay');
+            const reviewModalClose = document.getElementById('review-modal-close');
+            const reviewModalText = document.getElementById('review-modal-text');
+
+            function openReviewModal(review) {
+                reviewModalText.textContent = review;
+                reviewModalOverlay.classList.add('active');
+                body.classList.add('menu-open');
+            }
+
+            function closeReviewModal() {
+                reviewModalOverlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+
+            reviewCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const review = card.getAttribute('data-review');
+                    if (review) openReviewModal(review);
+                });
+            });
+
+            if (reviewModalClose) reviewModalClose.addEventListener('click', closeReviewModal);
+            if (reviewModalOverlay) reviewModalOverlay.addEventListener('click', (e) => { if (e.target === reviewModalOverlay) closeReviewModal(); });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && reviewModalOverlay && reviewModalOverlay.classList.contains('active')) {
+                    closeReviewModal();
+                }
+            });
         });
     </script>
 </body>

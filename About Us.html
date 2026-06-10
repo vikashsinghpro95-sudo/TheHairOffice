@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hair Office | About us – Medical Hair Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAF9;
+            color: #1C1917;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* marquee same as main */
+        .marquee-container {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-content {
+            animation: scroll 25s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Brand logo marquee for clinic accreditations (same as home page) */
+        .brand-marquee {
+            display: flex;
+            width: max-content;
+            animation: brand-scroll 35s linear infinite;
+        }
+        .brand-marquee .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            animation: none;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.5rem;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .brand-logo img {
+            max-height: 56px;
+            width: auto;
+        }
+        .brand-logo:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        .marquee-overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            pointer-events: none;
+        }
+        .marquee-overlay.left-overlay {
+            left: 0;
+            background: linear-gradient(to right, #FAFAF9 0%, rgba(250, 250, 249, 0) 100%);
+        }
+        .marquee-overlay.right-overlay {
+            right: 0;
+            background: linear-gradient(to left, #FAFAF9 0%, rgba(250, 250, 249, 0) 100%);
+        }
+        @keyframes brand-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* subtle reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* mobile menu overlay & panel — identical to main */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background-color: #FAFAF9;
+            z-index: 9999;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .mobile-menu.active {
+            left: 0;
+        }
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* custom scroll hide */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* timeline style for about */
+        .timeline-dot {
+            box-shadow: 0 0 0 4px rgba(28,25,23,0.08);
+        }
+
+        /* Instagram-style video modal */
+        .video-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .video-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .video-modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+        .video-modal-overlay.active .video-modal-container {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .video-modal-reel {
+            width: min(90vw, 400px);
+            max-height: 85vh;
+            aspect-ratio: 9 / 16;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .video-modal-reel video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .video-modal-close {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            color: #fff;
+            background: transparent;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .video-modal-close:hover {
+            background: rgba(255,255,255,0.15);
+        }
+    </style>
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
+</head>
+<body class="selection:bg-stone-200 selection:text-stone-900 relative">
+
+    <!-- MOBILE MENU (exact copy from main) -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="p-6">
+            <!-- Menu Header -->
+            <div class="flex justify-between items-center mb-10 pb-6 border-b border-stone-200">
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold tracking-tighter text-stone-900 uppercase">The Hair Office</span>
+                    <span class="text-xs text-stone-400 tracking-[0.2em] uppercase">Medical Practice</span>
+                </div>
+                <button id="mobile-menu-close" class="p-2 text-stone-500 hover:text-stone-900">
+                    <iconify-icon icon="solar:close-circle-bold" width="28"></iconify-icon>
+                </button>
+            </div>
+
+            <div class="space-y-8 mb-10">
+                <div>
+                    <h3 class="text-xs font-medium text-stone-400 uppercase tracking-widest mb-4">Navigation</h3>
+                    <ul class="space-y-4">
+                        <li><a href="https://magenta-elf-b895a8.netlify.app/" target="_blank" class="mobile-menu-link text-lg font-semibold text-stone-900 bg-[#E8C2B3] hover:bg-[#DFB5A5] p-3 rounded-xl transition-colors flex items-center gap-3 shadow-sm">
+                            <iconify-icon icon="solar:magic-stick-3-linear" class="text-stone-900" width="20"></iconify-icon>
+                            Free Hair Score
+                        </a></li>
+                        <li><a href="About Us.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="solar:users-group-two-rounded-linear" width="20"></iconify-icon>
+                            About us
+                        </a></li>
+                        <li><a href="treatments.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="ep:circle-plus-filled" width="20"></iconify-icon>
+                            Treatments
+                        </a></li>
+                        <li><a href="press.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="solar:medal-ribbons-star-linear" width="20"></iconify-icon>
+                            In the press
+                        </a></li>
+                        <li><a href="articles.html" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="simple-icons:microdotblog" width="20"></iconify-icon>
+                            Articles
+                        </a></li>
+                        
+                        <li><a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="mobile-menu-link text-lg font-medium text-stone-900 hover:text-stone-700 transition-colors flex items-center gap-3">
+                            <iconify-icon icon="solar:calendar-linear" width="20"></iconify-icon>
+                            Book a consultation
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    
+                </div>
+
+                
+            </div>
+
+            <!-- Mobile CTA Button -->
+            
+        </div>
+    </div>
+
+    <!-- NAVIGATION (identical to main) -->
+    <nav class="fixed top-0 w-full z-40 border-b border-stone-200/60 bg-[#F4E2DD] transition-all duration-300">
+        <div class="max-w-screen-2xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Left: Logo -->
+            <a href="index.html" class="flex flex-col items-start group">
+                <img src="logo.jpeg" alt="The Hair Office" style="width: 160px;" onerror="this.style.display='none'; this.parentElement.innerHTML='The Hair Office';">
+            </a>
+            <!-- Right: Nav links (desktop) + Mobile controls -->
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="About Us.html" class="text-xs font-medium text-stone-900 transition-colors uppercase tracking-wide border-b-2 border-stone-900 pb-1">About us</a>
+                    <a href="treatments.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Treatments</a>
+                    <a href="press.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">In the press</a>
+                    <a href="articles.html" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Article</a>
+                    <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="text-xs font-medium text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-wide">Book a consultation</a>
+                        <a href="https://magenta-elf-b895a8.netlify.app/" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#E8C2B3] text-stone-900 text-xs font-semibold hover:bg-[#DFB5A5] transition-colors uppercase tracking-wide shadow-sm"><iconify-icon icon="solar:magic-stick-3-linear" width="14" class="text-stone-900"></iconify-icon><span>Free Hair Score</span></a>
+                </div>
+                <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#1C1917] text-white text-xs font-medium hover:bg-stone-800 transition-colors">
+                    <iconify-icon icon="solar:calendar-linear" width="14"></iconify-icon>
+                    <span>Book Now</span>
+                </a>
+                <a href="index.html" class="md:hidden p-2 text-stone-800 hover:text-stone-600" aria-label="Home">
+                    <iconify-icon icon="solar:home-2-linear" width="24" stroke-width="1.5"></iconify-icon>
+                </a>
+                <button id="mobile-menu-button" class="md:hidden p-2 text-stone-800 hover:text-stone-600">
+                    <iconify-icon icon="solar:hamburger-menu-linear" width="24" stroke-width="1.5"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- ABOUT HERO - dedicated about page -->
+        <section class="pt-32 pb-16 md:pt-40 md:pb-20 px-6 max-w-screen-xl mx-auto">
+            <div class="flex flex-col items-center text-center mb-12 reveal active">
+                <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-stone-100 border border-stone-200/60">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span class="text-[10px] md:text-xs font-medium text-stone-500 uppercase tracking-widest">est. 2026</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-stone-900 mb-8 leading-[0.95] max-w-4xl mx-auto">
+                    Precision, trust & the <span class="text-stone-400 italic font-light">science of hair</span>
+                </h1>
+                <p class="text-stone-500 text-lg md:text-xl font-light max-w-2xl leading-relaxed mx-auto">
+                    The Hair Office was founded by two specialists who saw that hair restoration needed a more rigorous, ethical and medically-led approach. Every patient receives a fully personalised plan, rooted in decades of collective experience.
+                </p>
+            </div>
+
+            <!-- full width image (clinic) -->
+            <div class="w-full h-[600px] md:h-[900px] rounded-3xl overflow-hidden shadow-xl reveal">
+                <img src="https://images.unsplash.com/flagged/photo-1580820258381-20c91a156841?q=80&w=1160&auto=format&fit=crop" alt="The Hair Office clinic" class="w-full h-full object-cover grayscale object-center">
+            </div>
+
+            <!-- our story grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24">
+                <div class="reveal">
+                    <span class="text-xs font-medium text-stone-400 uppercase tracking-widest">why we exist</span>
+                    <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mt-3 mb-6">Beyond high‑street clinics</h2>
+                    <div class="space-y-5 text-stone-600 leading-relaxed">
+                        <p>We opened our doors with a simple belief: hair restoration should be held to the same standards as any other branch of medicine. Too many patients came to us after disappointing experiences — rushed consultations, hidden fees, and results that looked unnatural.</p>
+                        <p>At The Hair Office, every treatment begins with a full medical assessment, diagnostic imaging, and a honest conversation about what’s achievable. Our lead practitioners, Dr. Anju Mehta and Kelly Morrell, personally oversee each step — from the first phone call to the final aftercare review.</p>
+                    </div>
+                </div>
+                <div class="reveal delay-100">
+                    <div class="bg-stone-100 p-8 rounded-3xl border border-stone-200/70 h-fit">
+                        <h3 class="text-xl font-medium text-stone-900 mb-6">Our core values</h3>
+                        <ul class="space-y-5">
+                            <li class="flex gap-4 items-start"><span class="w-6 h-6 rounded-full bg-stone-200 flex items-center justify-center mt-0.5"><iconify-icon icon="solar:check-read-linear" width="14" class="text-stone-700"></iconify-icon></span><div><span class="font-medium text-stone-900 block">Diagnosis Before Treatment</span><span class="text-sm text-stone-500">Hair loss is first understood as a medical condition. Careful assessment of the scalp, follicles, and underlying causes guides every treatment plan.</span></div></li>
+                            <li class="flex gap-4 items-start"><span class="w-6 h-6 rounded-full bg-stone-200 flex items-center justify-center mt-0.5"><iconify-icon icon="solar:check-read-linear" width="14" class="text-stone-700"></iconify-icon></span><div><span class="font-medium text-stone-900 block">Evidence-Based Medicine</span><span class="text-sm text-stone-500">Treatments are chosen based on scientific evidence, clinical research, and established medical principles, not trends.</span></div></li>
+                            <li class="flex gap-4 items-start"><span class="w-6 h-6 rounded-full bg-stone-200 flex items-center justify-center mt-0.5"><iconify-icon icon="solar:check-read-linear" width="14" class="text-stone-700"></iconify-icon></span><div><span class="font-medium text-stone-900 block">Biological Regeneration</span><span class="text-sm text-stone-500">Whenever possible, treatments focus on supporting the body's natural repair processes — improving scalp health and stimulating follicular function.</span></div></li>
+                            <li class="flex gap-4 items-start"><span class="w-6 h-6 rounded-full bg-stone-200 flex items-center justify-center mt-0.5"><iconify-icon icon="solar:check-read-linear" width="14" class="text-stone-700"></iconify-icon></span><div><span class="font-medium text-stone-900 block">Honest Medical Guidance</span><span class="text-sm text-stone-500">Patients receive clear, realistic advice about what treatments can and cannot achieve, with long-term hair health as the priority.</span></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- timeline / milestones -->
+        
+
+        <!-- Meet the team again (more detailed) but we already have lead specialists, maybe complementary -->
+        <section class="py-24 px-6 max-w-screen-xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto reveal">
+                <h2 class="text-3xl md:text-5xl font-medium tracking-tight text-stone-900 mb-4">The faces behind the results</h2>
+            </div>
+
+            <!-- we re-use the same two doctors from the main page, but add more context (since about page) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto mt-16">
+                <!-- Dr. Anju Mehta -->
+                <div class="group relative reveal">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-6 bg-stone-200">
+                        <img src="images/Dr-Anju-Meta-CSC-610x690.png" alt="Dr. Anju Mehta" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 saturate-0 group-hover:saturate-100" onerror="this.src='https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop'">
+                        <div class="absolute bottom-4 left-4 bg-[#FAFAF9]/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
+                            <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Aesthetics Doctor</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-medium text-stone-900">Dr. Anju Mehta</h3>
+                            <iconify-icon icon="solar:verified-check-bold" class="text-stone-300" width="24"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">MBBS, MD (Anaesthesia), JCCP Level 7</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            Dr Anju Mehta brings over two decades of clinical experience as an Anaesthetist, with a background spanning the NHS and international practice. She transitioned into aesthetic medicine following completion of the Ofqual-regulated, JCCP-approved Level 7 postgraduate diploma in injectables - the highest recognised standard of training in the UK.
+                        </p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            She has since undertaken advanced training in regenerative aesthetics and medical hair restoration, including PRP, polynucleotides and evidence-led approaches, allowing her to take a more comprehensive, diagnosis-driven view of hair and scalp health.
+                        </p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-6">
+                            At The Hair Office, her work is defined by clinical rigour, precision, and a deep understanding of the biological processes that underpin hair loss. Each treatment plan is highly personalised and ethically considered — with a focus on long-term improvement rather than short-term fixes. Known for her calm and meticulous approach, Dr Mehta builds enduring patient relationships, guiding each individual through a structured, carefully considered treatment journey.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">Aesthetics Doctor</span>
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">20+ Years of Medical Experience</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kelly Morrell -->
+                <div class="group relative reveal delay-100">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[3/4] mb-6 bg-stone-200">
+                        <img src="images/Kelly+Morrell,+Scalp+Confidential.webp" 
+                             alt="Kelly Morrell" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 saturate-0 group-hover:saturate-100">
+                        
+                        <div class="absolute bottom-4 left-4 bg-[#FAFAF9]/90 backdrop-blur px-4 py-2 rounded-lg border border-white/20">
+                             <p class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Scalp Specialist</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-medium text-stone-900">Kelly Morrell</h3>
+                            <iconify-icon icon="solar:verified-check-bold" class="text-stone-300" width="24"></iconify-icon>
+                        </div>
+                        <p class="text-sm font-medium text-stone-500 uppercase tracking-wide mt-1 mb-4">Hair Restoration Specialist</p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            Kelly Morrell brings over 13 years of experience as a specialist in hair restoration, with a focused expertise in advanced, non-surgical treatments for hair loss and scalp health.
+                        </p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-4">
+                            Her work is shaped by a detailed understanding of hair biology and regenerative processes, supported by extensive experience in treatments such as growth factor therapies, microneedling, and scalp micropigmentation. She has also incorporated advanced diagnostic approaches, including genetic testing and trichoscopy, to better understand the underlying drivers of hair loss.
+                        </p>
+                        <p class="text-stone-600 font-light leading-relaxed mb-6">
+                            At The Hair Office, Kelly's approach is precise, methodical, and highly individualised - centred on identifying the underlying problem before selecting the treatment. Each plan is tailored with care, combining clinical insight with a strong aesthetic sensibility to achieve natural, long-term outcomes. Her work is guided by consistency, clarity, and a commitment to long-term hair health.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">13 + Years of Hair Restoration Experience</span>
+                            <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">Hair Restoration Practitioner of the Year 2024 Finalist</span>
+                            <!-- <span class="px-2 py-1 rounded border border-stone-200 bg-[#FAFAF9] text-[10px] uppercase tracking-wide text-stone-500">ISHRS Fellow</span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Accreditations & Clinic Partners (same slider as home page) -->
+        <section class="py-12 border-y border-stone-200 bg-[#FAFAF9]">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="mb-6 text-center">
+                    <span class="text-xs font-medium text-stone-400 uppercase tracking-widest">Practitioners seen in</span>
+                </div>
+                <div class="relative overflow-hidden">
+                    <div class="brand-marquee">
+                        <div class="marquee-content">
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/General_Medical_Council_logo.svg" alt="General Medical Council (GMC)">
+                                <span class="sr-only">GMC Registered</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://ukstudycentre.co.uk/wp-content/uploads/2018/03/Tatler_logo_text.png" alt="Featured in Tatler">
+                                <span class="sr-only">Featured in Tatler 2025</span>
+                            </div>
+                            
+                            <div class="brand-logo">
+                                <img src="https://d1ooscleda9ip9.cloudfront.net/Upload/635/Documents/2017%20News%20images/jccp-logo.png" alt="JCCP Approved">
+                                <span class="sr-only">JCCP Approved</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://uk.acegroup.online/wp-content/uploads/2025/10/ACE-Group-World-UK-Site-Logo.png" alt="ACE Group">
+                                <span class="sr-only">ACE Group</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://wowfacial.co.uk/wp-content/uploads/2023/08/The-Tweakments-Guide-Content-Coordinator2.jpg" alt="The Tweakments Guide">
+                                <span class="sr-only">The Tweakments Guide</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://www.newsworks.org.uk/wp-content/uploads/2021/06/The_Sunday_Times_logo_310.png" alt="The Sunday Times">
+                                <span class="sr-only">The Sunday Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://storage.googleapis.com/ft-commercial/images/FT_LANDSCAPE_RGB_AW.original.jpg" alt="Financial Times">
+                                <span class="sr-only">Financial Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRijPLcVpbm6tmBC7OUpD8OFNYDR_fmMFWnhw&s" alt="Men's Health">
+                                <span class="sr-only">Men's Health</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/GQ_Logo.svg" alt="GQ">
+                                <span class="sr-only">GQ</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://images.squarespace-cdn.com/content/v1/568abe4569492ea07bd8d391/1524586542319-38YXVJD1TOT1IFS7HLMF/press-logo-gloss+2.png" alt="Get The Gloss">
+                                <span class="sr-only">Get The Gloss</span>
+                            </div>
+                        </div>
+                        <div class="marquee-content">
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/General_Medical_Council_logo.svg" alt="General Medical Council (GMC)">
+                                <span class="sr-only">GMC Registered</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://ukstudycentre.co.uk/wp-content/uploads/2018/03/Tatler_logo_text.png" alt="Featured in Tatler">
+                                <span class="sr-only">Featured in Tatler 2025</span>
+                            </div>
+                            
+                            <div class="brand-logo">
+                                <img src="https://d1ooscleda9ip9.cloudfront.net/Upload/635/Documents/2017%20News%20images/jccp-logo.png" alt="JCCP Approved">
+                                <span class="sr-only">JCCP Approved</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://uk.acegroup.online/wp-content/uploads/2025/10/ACE-Group-World-UK-Site-Logo.png" alt="ACE Group">
+                                <span class="sr-only">ACE Group</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://wowfacial.co.uk/wp-content/uploads/2023/08/The-Tweakments-Guide-Content-Coordinator2.jpg" alt="The Tweakments Guide">
+                                <span class="sr-only">The Tweakments Guide</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://www.newsworks.org.uk/wp-content/uploads/2021/06/The_Sunday_Times_logo_310.png" alt="The Sunday Times">
+                                <span class="sr-only">The Sunday Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://storage.googleapis.com/ft-commercial/images/FT_LANDSCAPE_RGB_AW.original.jpg" alt="Financial Times">
+                                <span class="sr-only">Financial Times</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRijPLcVpbm6tmBC7OUpD8OFNYDR_fmMFWnhw&s" alt="Men's Health">
+                                <span class="sr-only">Men's Health</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/GQ_Logo.svg" alt="GQ">
+                                <span class="sr-only">GQ</span>
+                            </div>
+                            <div class="brand-logo">
+                                <img src="https://images.squarespace-cdn.com/content/v1/568abe4569492ea07bd8d391/1524586542319-38YXVJD1TOT1IFS7HLMF/press-logo-gloss+2.png" alt="Get The Gloss">
+                                <span class="sr-only">Get The Gloss</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-overlay left-overlay"></div>
+                    <div class="marquee-overlay right-overlay"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured in: The Tweakments Guide (click to open Instagram-style video) -->
+        <section class="py-24 bg-stone-100 border-t border-stone-200">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+                    <div class="reveal">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-widest">Featured in</span>
+                        <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-stone-900 mt-3 mb-6">The Tweakments Guide</h2>
+                        <p class="text-stone-600 mb-4">Kelly Morrell on medical scalp and hair restoration.</p>
+                        <p class="text-stone-600 mb-6">The Tweakments Guide – a leading independent aesthetics platform – invited Kelly to share her approach to scalp micropigmentation and non‑surgical hair restoration.</p>
+                        <p id="tweakments-video-cta" class="inline-flex items-center gap-2 text-sm font-medium text-stone-900 border-b border-stone-300 pb-0.5 hover:border-stone-700 cursor-pointer transition-colors">
+                            Watch the full Instagram Reel
+                            <iconify-icon icon="solar:play-circle-bold" width="20"></iconify-icon>
+                        </p>
+                        <p class="text-xs text-stone-500 mt-2">Hear how we combine medical frameworks with realistic, confidence‑building results.</p>
+                    </div>
+                    <div class="flex justify-center md:justify-end reveal">
+                        <button type="button" id="tweakments-video-card" class="relative rounded-2xl overflow-hidden aspect-[9/16] w-full max-w-[320px] bg-stone-800 cursor-pointer group text-left">
+                        <video id="tweakments-video-poster" class="w-full h-full object-cover" muted playsinline preload="metadata">
+                            <source src="Videos/thetweakmentsguide_DCtMvvzsIw_.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                            <div class="w-20 h-20 bg-[#FAFAF9]/90 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-stone-200 shadow-lg group-hover:scale-105 transition-transform">
+                                <iconify-icon icon="solar:play-bold" class="text-stone-800 ml-1" width="32"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <p class="text-xs font-semibold uppercase tracking-wider opacity-90">The Tweakments Guide</p>
+                            <p class="text-sm font-medium">Kelly Morrell · Scalp & hair</p>
+                        </div>
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instagram-style video player modal -->
+        <div class="video-modal-overlay" id="video-modal-overlay">
+            <div class="video-modal-container" id="video-modal-container">
+                <button type="button" class="video-modal-close" id="video-modal-close" aria-label="Close">
+                    <iconify-icon icon="solar:close-circle-bold" width="36"></iconify-icon>
+                </button>
+                <div class="video-modal-reel">
+                    <video id="video-modal-player" playsinline controls controlsList="nodownload" class="w-full h-full object-cover">
+                        <source src="Videos/thetweakmentsguide_DCtMvvzsIw_.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </main>
+ <!-- Content Rich Footer -->
+    <footer class="bg-[#1C1917] text-stone-400 pt-20 pb-10">
+        <div class="max-w-screen-xl mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <!-- Brand -->
+                <div class="space-y-6">
+                    <h3 class="text-stone-100 text-lg font-semibold uppercase tracking-tight">The Hair Office</h3>
+                    <p class="text-sm leading-relaxed max-w-xs">
+                        A medical practice dedicated to the art and science of hair restoration. 
+                    </p>
+                    <p class="text-sm leading-relaxed max-w-xs mt-2">
+                        Battersea Park Clinic<br>
+                        521 - 525 Battersea Park Road<br>
+                        London SW11 3BN<br>
+                        <a href="tel:02078469596" class="hover:text-stone-200 transition-colors">020 7846 9596</a>
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://www.instagram.com/thehairofficeofficial?igsh=cXF1dmE4M2NtM3hi&utm_source=qr" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:instagram-linear" width="20"></iconify-icon></a>
+                        <a href="https://www.linkedin.com/company/the-hair-office/" class="text-stone-400 hover:text-white transition-colors"><iconify-icon icon="solar:linkedin-linear" width="20"></iconify-icon></a>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div>
+                    <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Navigation</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="About Us.html" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="treatments.html" class="hover:text-white transition-colors">Treatments</a></li>
+                        <li><a href="articles.html" class="hover:text-white transition-colors">articles</a></li>
+                        <li><a href="press.html" class="hover:text-white transition-colors">Press</a></li>
+                        </ul>
+                </div>
+
+                <!-- Treatments (aligned right) -->
+                <div class="md:text-right">
+                    <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Treatments</h4>
+                    <ul class="space-y-4 text-sm md:text-right">
+                        <li><a href="treatments.html#prp-prf" class="hover:text-white transition-colors">PRP / PRF</a></li>
+                        <li><a href="treatments.html#polynucleotides" class="hover:text-white transition-colors">Polynucleotides</a></li>
+                        <li><a href="treatments.html#calecim" class="hover:text-white transition-colors">Calecim</a></li>
+                        <li><a href="treatments.html#smp" class="hover:text-white transition-colors">SMP</a></li>
+                        <li><a href="treatments.html#tricho-test" class="hover:text-white transition-colors">Tricho test</a></li>
+                        <li><a href="treatments.html#needle-free-test" class="hover:text-white transition-colors">Needle free instant Blood test</a></li>
+                        <li><a href="treatments.html#scalp-cleanse" class="hover:text-white transition-colors">Scalp cleanse</a></li>
+                        <li><a href="treatments.html#hair-cocktail" class="hover:text-white transition-colors">Hair cocktail</a></li>
+                        <li><a href="treatments.html#red-light" class="hover:text-white transition-colors">Red light</a></li>
+                    </ul>
+                </div>
+
+                <!-- Stay Updated (aligned right) -->
+                <div class="md:text-right">
+                    <h4 class="text-stone-100 text-sm font-semibold uppercase tracking-widest mb-6">Stay Updated</h4>
+                    <p class="text-xs mb-4 md:text-right">Latest medical news and clinic updates.</p>
+                    <form class="flex flex-col gap-3 md:ml-auto md:max-w-xs">
+                        <input type="email" placeholder="Email address" class="bg-stone-800 border border-stone-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-stone-500 transition-colors">
+                        <button class="bg-stone-100 text-stone-900 px-4 py-3 rounded-lg text-sm font-medium hover:bg-stone-200 transition-colors">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+                </div>
+
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <div class="flex flex-wrap gap-x-6 gap-y-2 font-normal">
+                    <a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="terms-of-use.html" class="hover:text-white transition-colors">Terms of Use</a>
+                    <a href="medical-disclaimer.html" class="hover:text-white transition-colors">Medical Disclaimer</a>
+                    <a href="legal-notice.html" class="hover:text-white transition-colors">Legal Notice</a>
+                    <a href="cookie-policy.html" class="hover:text-white transition-colors">Cookie Policy</a>
+                </div>
+                <span>© 2026 The Hair Office Ltd. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+    <!-- Floating CTA (same) -->
+    <div class="fixed bottom-8 right-6 z-50">
+        <a href="https://www.phorest.com/salon/thehairoffice" target="_blank" class="group flex items-center gap-3 bg-[#1C1917] hover:bg-stone-800 text-white pl-6 pr-5 py-4 rounded-full shadow-2xl hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 ring-1 ring-white/20">
+            <div class="flex flex-col items-start">
+                <span class="text-sm font-semibold tracking-wide">Book a consultation</span>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-[#FAFAF9]/10 flex items-center justify-center group-hover:bg-[#FAFAF9]/20 transition-colors">
+                <iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>
+            </div>
+        </a>
+    </div>
+
+    <!-- SAME MOBILE SCRIPT + reveal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // mobile menu
+            const menuButton = document.getElementById('mobile-menu-button');
+            const menuCloseButton = document.getElementById('mobile-menu-close');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const body = document.body;
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('active');
+                mobileMenuOverlay.classList.add('active');
+                body.classList.add('menu-open');
+            }
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+            if(menuButton) menuButton.addEventListener('click', openMobileMenu);
+            if(menuCloseButton) menuCloseButton.addEventListener('click', closeMobileMenu);
+            if(mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            mobileMenuLinks.forEach(link => { link.addEventListener('click', closeMobileMenu); });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) closeMobileMenu();
+            });
+
+            // reveal on scroll
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                reveals.forEach((r) => {
+                    const top = r.getBoundingClientRect().top;
+                    if (top < windowHeight - 150) r.classList.add('active');
+                });
+            }
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll();
+
+            // fix missing images fallback
+            document.querySelectorAll('img').forEach(img => {
+                img.onerror = function() { this.onerror=null; this.src='https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=2070&auto=format&fit=crop'; };
+            });
+
+            // Tweakments video: open Instagram-style modal on click, close and pause on overlay/button/Escape
+            const videoModalOverlay = document.getElementById('video-modal-overlay');
+            const videoModalClose = document.getElementById('video-modal-close');
+            const videoModalPlayer = document.getElementById('video-modal-player');
+            const tweakmentsCard = document.getElementById('tweakments-video-card');
+            const tweakmentsCta = document.getElementById('tweakments-video-cta');
+
+            function openVideoModal() {
+                if (videoModalOverlay) videoModalOverlay.classList.add('active');
+                document.body.classList.add('menu-open');
+                if (videoModalPlayer) {
+                    videoModalPlayer.currentTime = 0;
+                    videoModalPlayer.play().catch(function() {});
+                }
+            }
+
+            function closeVideoModal() {
+                if (videoModalOverlay) videoModalOverlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                if (videoModalPlayer) videoModalPlayer.pause();
+            }
+
+            if (tweakmentsCard) tweakmentsCard.addEventListener('click', openVideoModal);
+            if (tweakmentsCta) tweakmentsCta.addEventListener('click', function(e) { e.preventDefault(); openVideoModal(); });
+            if (videoModalClose) videoModalClose.addEventListener('click', closeVideoModal);
+            if (videoModalOverlay) videoModalOverlay.addEventListener('click', function(e) { if (e.target === videoModalOverlay) closeVideoModal(); });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && videoModalOverlay && videoModalOverlay.classList.contains('active')) closeVideoModal();
+            });
+        });
+    </script>
+</body>
+</html>
